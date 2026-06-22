@@ -1,0 +1,5 @@
+REGION=westeurope
+CLUSTER_NODE_COUNT=1
+AKS_RG_NAME=matrix-rg
+AKS_NAME=matrix-aks
+CLUSTER_NODE_VMSIZE=Standard_D4s_v5
