@@ -1,0 +1,165 @@
+@startuml
+title Matrix Platform on Kubernetes
+left to right direction
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+cloud "Internet" as internet
+
+cloud "Azure" {
+
+
+cloud "Azure Blob Storage" {
+    [Media Storage] as media_storage
+    [Postgres WAL Archive] as wal_archive
+    [Daily Backups] as daily_backups
+}
+
+cloud "Azure Key Vault" as akv
+
+
+}
+
+node "Azure Kubernetes Service" {
+    frame "Control Plane"{
+        frame "Secrets Management" {
+            [External Secrets Operator] as eso
+            [Kubernetes Secret Objects] as kso
+        }
+
+        frame "Observability" {
+            [Prometheus] as prometheus
+            [Grafana] as grafana
+            [Loki] as loki
+            [Node Exporter] as node_exporter
+            [kube-state-metrics] as kube_state_metrics
+        }
+
+        frame "GitOps" {
+            [ArgoCD] as argocd
+        }
+    }
+
+    frame "Matrix Namespace" {
+
+        [Element Web] as element_web
+
+        package "Synapse Workers" as SW {
+            [Synapse Main] as synapse_main
+            [Client Reader] as client_reader
+            [Federation Reader] as federation_reader
+            [Background Worker] as background_worker
+            [Media Worker] as media_worker
+        }
+
+        [coturn] as coturn
+
+        database "CloudNativePG" as pg
+
+        package "Redis" as redis {
+            [Redis Master] as redis_master
+            [Redis Replica] as redis_replica
+            [Redis Sentinel] as redis_sentinel
+        }
+
+        [Backup Worker] as backup_worker
+    }
+
+
+    frame "Ingress Layer" {
+        [Traefik] as traefik
+    }
+
+    frame "Auth" {
+        [Authelia] as authelia
+    }
+}
+
+' =========================
+' INTERNET / ENTRY
+' =========================
+internet -[#FFFF00]---> traefik : HTTPS requests
+internet -[#FFFF00]-> coturn : peer exchange forwarding
+
+traefik --> element_web : forward web UI
+traefik --> synapse_main : forward Matrix API
+traefik -[#0066CC]-> authelia : forward auth requests\n for OIDC flow
+
+element_web --> synapse_main : use Matrix Client-Server API
+
+synapse_main -[#0066CC]-> authelia : authenticate users
+
+' =========================
+' DATABASE (RED)
+' =========================
+SW -[#CC0000]-> pg : read/write State
+
+pg -[#CC0000]-> backup_worker : fetched by,\n for backups
+backup_worker -[#CC0000]-> daily_backups : create backups
+backup_worker -[#CC0000]-> wal_archive
+
+' =========================
+' REDIS (ORANGE)
+' =========================
+synapse_main -[#FF8C00]-> redis_master : cache & queues
+client_reader -[#FF8C00]-> redis_master : cache lookups
+federation_reader -[#FF8C00]-> redis_master : cache lookups
+
+redis_master -[#FF8C00]-> redis_replica : replicate data
+redis_sentinel .[#FF8C00].> redis_master : monitor master
+redis_sentinel .[#FF8C00].> redis_replica : monitor replica
+
+' =========================
+' MEDIA (GREEN)
+' =========================
+
+media_worker -[#228B22]-> media_storage : store media files
+
+' =========================
+' OBSERVABILITY
+' =========================
+prometheus -[#black,dotted]-> synapse_main
+prometheus -[#black,dotted]-> pg
+prometheus -[#black,dotted]-> redis_master
+prometheus -[#black,dotted]-> traefik : scrape metrics
+prometheus -[#black,dotted]-> coturn
+prometheus -[#black,dotted]-> kube_state_metrics
+prometheus -[#black,dotted]-> node_exporter
+
+grafana --> prometheus : query metrics
+grafana --> loki : query logs
+
+' =========================
+' GITOPS (DOTTED)
+' =========================
+argocd ..> grafana
+argocd ..> loki
+argocd ..> traefik
+argocd ..> authelia
+argocd ..> SW
+argocd ..> pg
+argocd ..> redis
+argocd ..> prometheus
+argocd ..> eso
+
+' =========================
+' SECRETS (PINK)
+' =========================
+
+synapse_main -[#AA6994]-> coturn : request TURN credentials
+
+eso -[#FF69B4]-> akv : request secrets
+eso -[#FF69B4]-> kso : write secrets
+
+kso -[#FF69B4]-> traefik : apply TLS secrets
+kso -[#FF69B4]-> authelia : apply auth secrets
+
+kso -[#FF69B4]-> SW : apply secrets
+
+kso -[#FF69B4]-> pg : apply database credentials
+
+kso -[#FF69B4]-> redis : apply Redis credentials
+
+kso -[#FF69B4]-> coturn : apply TURN credentials
+
+@enduml
