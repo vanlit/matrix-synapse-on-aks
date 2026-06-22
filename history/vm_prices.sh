@@ -1,1 +1,0 @@
-link="https://prices.azure.com/api/retail/prices?\$filter=serviceName eq 'Virtual Machines' and armRegionName eq 'westeurope'"
