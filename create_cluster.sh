@@ -20,6 +20,8 @@ az aks create \
   --enable-managed-identity \
   --network-plugin azure \
   --network-plugin-mode overlay \
+  --enable-oidc-issuer \
+  --enable-workload-identity \
   --generate-ssh-keys
 
 
