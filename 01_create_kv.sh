@@ -3,6 +3,6 @@
 . ./cfg.sh
 
 az keyvault create \
-  --name $REGION-matrix-kv \
+  --name $KV_NAME \
   --resource-group $AKS_RG_NAME \
   --location $REGION

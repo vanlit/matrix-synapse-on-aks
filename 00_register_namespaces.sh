@@ -1,3 +1,5 @@
+# assumes az logged in and tenant selected
+
 az provider register --namespace Microsoft.ContainerService
 az provider register --namespace Microsoft.KeyVault
 
