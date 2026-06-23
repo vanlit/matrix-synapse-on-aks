@@ -134,10 +134,12 @@ if ! kubectl wait \
   clustersecretstore/azure-keyvault \
   --timeout=120s
 then
-  echo "-> Success."
+  echo "-> FAIL."
   kubectl describe clustersecretstore azure-keyvault
   exit 1
 fi
+echo "-> SUCCESS."
+
 
 echo "=== ESO Bootstrap Complete ==="
 echo ""
