@@ -128,6 +128,17 @@ spec:
         namespace: ${ESO_NAMESPACE}
 EOF
 
+echo "-> Waiting for ClusterSecretStore to get ready, timeout 120s"
+if ! kubectl wait \
+  --for=jsonpath='{.status.conditions[?(@.type=="Ready")].status}'=True \
+  clustersecretstore/azure-keyvault \
+  --timeout=120s
+then
+  echo "-> Success."
+  kubectl describe clustersecretstore azure-keyvault
+  exit 1
+fi
+
 echo "=== ESO Bootstrap Complete ==="
 echo ""
 echo "Next validation:"
