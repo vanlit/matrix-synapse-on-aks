@@ -116,7 +116,7 @@ cat <<EOF | kubectl apply -f -
 apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
 metadata:
-  name: azure-keyvault
+  name: $ESO_KRESNAME
 spec:
   provider:
     azurekv:
@@ -131,11 +131,11 @@ EOF
 echo "-> Waiting for ClusterSecretStore to get ready, timeout 120s"
 if ! kubectl wait \
   --for=jsonpath='{.status.conditions[?(@.type=="Ready")].status}'=True \
-  clustersecretstore/azure-keyvault \
+  clustersecretstore/$ESO_KRESNAME \
   --timeout=120s
 then
   echo "-> FAIL."
-  kubectl describe clustersecretstore azure-keyvault
+  kubectl describe clustersecretstore $ESO_KRESNAME
   exit 1
 fi
 echo "-> SUCCESS."

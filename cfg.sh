@@ -9,6 +9,7 @@ export CLUSTER_NODE_VMSIZE=Standard_D4s_v5
 
 export KV_NAME=$REGION-matrix-kv
 
+export ESO_KRESNAME="azure-keyvault"
 export ESO_NAMESPACE="external-secrets"
 export ESO_IDENTITY_NAME="eso-identity"
 export ESO_FED_CRED_NAME="eso-federation"
