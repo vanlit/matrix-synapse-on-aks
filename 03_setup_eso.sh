@@ -110,6 +110,8 @@ echo "7. ClusterSecretStore"
 echo "-> Creating ClusterSecretStore"
 echo "========================="
 
+AZ_TENANT_ID=$(az account show --query tenantId -o tsv)
+
 cat <<EOF | kubectl apply -f -
 apiVersion: external-secrets.io/v1
 kind: ClusterSecretStore
@@ -118,6 +120,7 @@ metadata:
 spec:
   provider:
     azurekv:
+      tenantId: ${AZ_TENANT_ID}
       vaultUrl: https://${KV_NAME}.vault.azure.net/
       authType: WorkloadIdentity
       serviceAccountRef:
