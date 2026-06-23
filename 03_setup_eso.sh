@@ -6,24 +6,7 @@ set -euo pipefail
 echo "=== ESO Bootstrap Starting ==="
 
 echo "========================="
-echo "1. Create namespace"
-echo "-> Creating namespace: $ESO_NAMESPACE"
-echo "========================="
-kubectl create namespace $ESO_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
-
-echo "========================="
-echo "2. Install ESO via Helm"
-echo "-> Installing External Secrets Operator"
-echo "========================="
-helm repo add external-secrets https://charts.external-secrets.io >/dev/null
-helm repo update >/dev/null
-
-helm upgrade --install external-secrets \
-  external-secrets/external-secrets \
-  -n $ESO_NAMESPACE
-
-echo "========================="
-echo "-> Ensuring managed identity: $ESO_IDENTITY_NAME"
+echo "0. Ensuring managed identity: $ESO_IDENTITY_NAME"
 echo "========================="
 
 IDENTITY_JSON=$(az identity show \
@@ -40,7 +23,7 @@ else
   echo "   Identity already exists"
 fi
 
-CLIENT_ID=$(az identity show \
+ESO_CLIENT_ID=$(az identity show \
   --name $ESO_IDENTITY_NAME \
   --resource-group $AKS_RG_NAME \
   --query clientId -o tsv)
@@ -50,7 +33,26 @@ ESO_PRINCIPAL_ID=$(az identity show \
   --resource-group $AKS_RG_NAME \
   --query principalId -o tsv)
 
-echo "   CLIENT_ID=$CLIENT_ID"
+echo "   ESO_CLIENT_ID=$ESO_CLIENT_ID"
+
+
+echo "========================="
+echo "1. Create namespace"
+echo "-> Creating namespace: $ESO_NAMESPACE"
+echo "========================="
+kubectl create namespace $ESO_NAMESPACE --dry-run=client -o yaml | kubectl apply -f -
+
+echo "========================="
+echo "2. Install ESO via Helm"
+echo "-> Installing External Secrets Operator"
+echo "========================="
+helm repo add external-secrets https://charts.external-secrets.io >/dev/null
+helm repo update >/dev/null
+
+helm upgrade --install external-secrets \
+  external-secrets/external-secrets \
+  -n $ESO_NAMESPACE \
+  --set serviceAccount.annotations."azure\.workload\.identity/client-id"="$ESO_CLIENT_ID"
 
 echo "========================="
 echo "4. Key Vault permissions"
