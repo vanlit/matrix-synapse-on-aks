@@ -45,7 +45,7 @@ CLIENT_ID=$(az identity show \
   --resource-group $AKS_RG_NAME \
   --query clientId -o tsv)
 
-PRINCIPAL_ID=$(az identity show \
+ESO_PRINCIPAL_ID=$(az identity show \
   --name $ESO_IDENTITY_NAME \
   --resource-group $AKS_RG_NAME \
   --query principalId -o tsv)
@@ -54,13 +54,20 @@ echo "   CLIENT_ID=$CLIENT_ID"
 
 echo "========================="
 echo "4. Key Vault permissions"
-echo "-> Setting Key Vault access policy"
+echo "-> Assigning Key Vault RBAC role"
 echo "========================="
 
-az keyvault set-policy \
+echo "fetching KV ID"
+KV_SCOPE=$(az keyvault show \
   --name $KV_NAME \
-  --object-id $PRINCIPAL_ID \
-  --secret-permissions get list >/dev/null
+  --query id -o tsv)
+
+echo "adding Role: Key Vault Secrets User (read secrets only)"
+az role assignment create \
+  --assignee-object-id $ESO_PRINCIPAL_ID \
+  --assignee-principal-type ServicePrincipal \
+  --role "Key Vault Secrets User" \
+  --scope $KV_SCOPE
 
 echo "========================="
 echo "5. OIDC issuer"
