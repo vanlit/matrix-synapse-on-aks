@@ -20,15 +20,18 @@ STORAGE_KEY=$(
 
 az storage container create \
   --account-name "$STORAGE_ACCOUNT_NAME" \
-  --name "$BLOB_MEDIA_CONTAINER"
+  --name "$BLOB_MEDIA_CONTAINER" \
+  --auth-mode login
 
 az storage container create \
   --account-name "$STORAGE_ACCOUNT_NAME" \
-  --name "$BLOB_WAL_CONTAINER"
+  --name "$BLOB_WAL_CONTAINER" \
+  --auth-mode login
 
 az storage container create \
   --account-name "$STORAGE_ACCOUNT_NAME" \
-  --name "$BLOB_BACKUP_CONTAINER"
+  --name "$BLOB_BACKUP_CONTAINER" \
+  --auth-mode login
 
 az storage container list \
   --account-name "$STORAGE_ACCOUNT_NAME" \
