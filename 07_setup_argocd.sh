@@ -23,11 +23,13 @@ helm upgrade --install argocd argo/argo-cd \
   --create-namespace \
   --set server.service.type=ClusterIP
 
-echo "4 - Waiting for ArgoCD deployments..."
-
-kubectl rollout status deployment/argocd-server -n "${ARGO_NS}"
-kubectl rollout status deployment/argocd-repo-server -n "${ARGO_NS}"
-kubectl rollout status deployment/argocd-application-controller -n "${ARGO_NS}"
+echo "4 - Waiting for ArgoCD deployments... (timeout after 180s)"
+kubectl wait pod \
+  --all \
+  -n "${ARGO_NS}" \
+  --for=condition=Ready \
+  --timeout=180s
+echo "Success, ArgoCD pods are Ready"
 
 echo
 echo "5 - Fetching initial admin password..."
