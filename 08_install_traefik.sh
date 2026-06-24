@@ -42,28 +42,70 @@ echo
 
 echo "4 - Installing Traefik..."
 
+
+# for azure, instead of --set service.spec.loadBalancerIP="$PUBLIC_IP", using the metadata fields, expecting traefik to catch that
 helm upgrade --install traefik traefik/traefik \
   --namespace "$TRAEFIK_NAMESPACE" \
   --set service.type=LoadBalancer \
-  --set service.spec.loadBalancerIP="$PUBLIC_IP" \
+  --set metadata.annotatoins.service.beta.kubernetes.io/azure-pip-name=$TRAEFIK_PUBLIC_IP_NAME \
+  --set metadata.annotatoins.service.beta.kubernetes.io/azure-load-balancer-resource-group: $AKS_RG_NAME \
   --set ingressRoute.dashboard.enabled=true \
   --set metrics.prometheus.enabled=true
 
 echo
+echo
+echo "5 - Waiting for Traefik pod readiness..."
 
-echo "5 - Waiting for deployment..."
+kubectl wait \
+  --for=condition=Ready \
+  pod \
+  --all \
+  -n "$TRAEFIK_NAMESPACE" \
+  --timeout=300s
+
+echo
+echo "6 - Waiting for deployment availability..."
 
 kubectl rollout status deployment/traefik \
   -n "$TRAEFIK_NAMESPACE" \
   --timeout=300s
 
 echo
+echo "7 - Waiting for LoadBalancer IP assignment..."
 
-echo "6 - Verifying service..."
+for i in $(seq 1 60); do
 
-kubectl get svc \
-  -n "$TRAEFIK_NAMESPACE" \
-  traefik
+  LB_IP=$(
+    kubectl get svc traefik \
+      -n "$TRAEFIK_NAMESPACE" \
+      -o jsonpath='{.status.loadBalancer.ingress[0].ip}' \
+      2>/dev/null || true
+  )
+
+  if [ -n "$LB_IP" ]; then
+    break
+  fi
+
+  echo "Waiting for Azure LoadBalancer..."
+  sleep 5
+
+done
+
+if [ -z "${LB_IP:-}" ]; then
+  echo "ERROR: LoadBalancer IP was not assigned"
+  exit 1
+fi
+
+echo "LoadBalancer IP assigned:"
+echo "  $LB_IP"
+
+if [ "$LB_IP" != "$PUBLIC_IP" ]; then
+  echo
+  echo "ERROR: Unexpected IP assigned"
+  echo "Expected: $PUBLIC_IP"
+  echo "Actual:   $LB_IP"
+  exit 1
+fi
 
 echo
 
