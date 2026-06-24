@@ -3,7 +3,6 @@ set -euo pipefail
 
 . ./cfg.sh
 
-ARGO_NS="matrix-argocd"
 ARGO_HELM_REPO="https://argoproj.github.io/argo-helm"
 
 echo "========================================"
