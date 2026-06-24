@@ -26,12 +26,27 @@ PUBLIC_IP_ID=$(
     -o tsv
 )
 
-az role assignment create \
-  --assignee-object-id "$AKS_PRINCIPAL_ID" \
-  --assignee-principal-type ServicePrincipal \
-  --role "Network Contributor" \
-  --scope "$PUBLIC_IP_ID" \
-  >/dev/null
+EXISTING_ASSIGNMENT_COUNT=$(
+  az role assignment list \
+    --assignee-object-id "$AKS_PRINCIPAL_ID" \
+    --scope "$PUBLIC_IP_ID" \
+    --query "[?roleDefinitionName=='Network Contributor'] | length(@)" \
+    -o tsv
+)
+
+if [ "$EXISTING_ASSIGNMENT_COUNT" -eq 0 ]; then
+  echo "Creating Network Contributor assignment..."
+
+  az role assignment create \
+    --assignee-object-id "$AKS_PRINCIPAL_ID" \
+    --assignee-principal-type ServicePrincipal \
+    --role "Network Contributor" \
+    --scope "$PUBLIC_IP_ID" \
+    >/dev/null
+
+else
+  echo "Network Contributor assignment already exists."
+fi
 
 
 echo "2 - Resolving Public previously-created IP for traefik..."
