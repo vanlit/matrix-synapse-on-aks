@@ -33,6 +33,7 @@ az storage container create \
   --name "$BLOB_BACKUP_CONTAINER" \
   --auth-mode login
 
+echo "### VERIFY LIST OF CONTAINERS:"
 az storage container list \
   --account-name "$STORAGE_ACCOUNT_NAME" \
   --account-key "$STORAGE_KEY" \
