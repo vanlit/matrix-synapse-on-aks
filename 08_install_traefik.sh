@@ -8,7 +8,38 @@ echo "Traefik Installation"
 echo "========================================"
 echo
 
-echo "1 - Resolving Public previously-created IP for traefik..."
+echo "1 - Granting AKS access to Azure Public IP..."
+
+AKS_PRINCIPAL_ID=$(
+  az aks show \
+    --resource-group "$AKS_RG_NAME" \
+    --name "$AKS_NAME" \
+    --query identity.principalId \
+    -o tsv
+)
+
+PUBLIC_IP_ID=$(
+  az network public-ip show \
+    --resource-group "$AKS_RG_NAME" \
+    --name "$TRAEFIK_PUBLIC_IP_NAME" \
+    --query id \
+    -o tsv
+)
+
+az role assignment create \
+  --assignee-object-id "$AKS_PRINCIPAL_ID" \
+  --assignee-principal-type ServicePrincipal \
+  --role "Network Contributor" \
+  --scope "$PUBLIC_IP_ID" \
+  >/dev/null
+
+if [ -z "$PUBLIC_IP" ]; then
+  echo "ERROR: Public IP not found"
+  exit 1
+fi
+
+
+echo "2 - Resolving Public previously-created IP for traefik..."
 
 PUBLIC_IP=$(
   az network public-ip show \
@@ -18,29 +49,24 @@ PUBLIC_IP=$(
     -o tsv
 )
 
-if [ -z "$PUBLIC_IP" ]; then
-  echo "ERROR: Public IP not found"
-  exit 1
-fi
-
 echo "Public IP: $PUBLIC_IP"
 echo
 
-echo "2 - Creating namespace..."
+echo "3 - Creating namespace..."
 
 kubectl create namespace "$TRAEFIK_NAMESPACE" \
   --dry-run=client -o yaml | kubectl apply -f -
 
 echo
 
-echo "3 - Adding Helm repo..."
+echo "4 - Adding Helm repo..."
 
 helm repo add traefik https://traefik.github.io/charts >/dev/null 2>&1 || true
 helm repo update >/dev/null
 
 echo
 
-echo "4 - Installing Traefik..."
+echo "5 - Installing Traefik..."
 
 
 # for azure, instead of --set service.spec.loadBalancerIP="$PUBLIC_IP", using the metadata fields, expecting traefik to catch that
@@ -54,7 +80,7 @@ helm upgrade --install traefik traefik/traefik \
 
 echo
 echo
-echo "5 - Waiting for Traefik pod readiness..."
+echo "6 - Waiting for Traefik pod readiness..."
 
 kubectl wait \
   --for=condition=Ready \
@@ -64,14 +90,14 @@ kubectl wait \
   --timeout=300s
 
 echo
-echo "6 - Waiting for deployment availability..."
+echo "7 - Waiting for deployment availability..."
 
 kubectl rollout status deployment/traefik \
   -n "$TRAEFIK_NAMESPACE" \
   --timeout=300s
 
 echo
-echo "7 - Waiting for LoadBalancer IP assignment..."
+echo "8 - Waiting for LoadBalancer IP assignment..."
 
 for i in $(seq 1 60); do
 
