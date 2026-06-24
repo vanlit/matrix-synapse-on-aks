@@ -23,7 +23,7 @@ helm upgrade --install argocd argo/argo-cd \
   --create-namespace \
   --set server.service.type=ClusterIP
 
-echo "4 - Waiting for ArgoCD deployments... (timeout after 180s)"
+echo "4 - Waiting for ArgoCD deployments... (timeout after 300s)"
 kubectl wait pod \
   --all \
   -n "${ARGO_NS}" \
