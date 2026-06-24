@@ -13,3 +13,12 @@ export ESO_KRESNAME="azure-keyvault"
 export ESO_NAMESPACE="external-secrets"
 export ESO_IDENTITY_NAME="eso-identity"
 export ESO_FED_CRED_NAME="eso-federation"
+
+
+export STORAGE_ACCOUNT_NAME="${REGION}matrixsa"
+
+export BLOB_MEDIA_CONTAINER="synapse-media"
+export BLOB_WAL_CONTAINER="postgres-wal"
+export BLOB_BACKUP_CONTAINER="postgres-backups"
+
+export TRAEFIK_PUBLIC_IP_NAME="matrix-traefik-ip"
