@@ -33,6 +33,41 @@ echo "Secret Store:        ${ESO_KRESNAME}"
 echo "ESO Namespace:       ${ESO_NAMESPACE}"
 echo
 
+echo "Checking operator Key Vault permissions..."
+
+MY_OBJECT_ID=$(az ad signed-in-user show --query id -o tsv)
+
+KV_SCOPE=$(az keyvault show \
+  --name "${KV_NAME}" \
+  --query id \
+  -o tsv)
+
+HAS_ROLE=$(
+  az role assignment list \
+    --assignee "${MY_OBJECT_ID}" \
+    --scope "${KV_SCOPE}" \
+    --all \
+    --query "[?roleDefinitionName=='Key Vault Secrets Officer'] | length(@)" \
+    -o tsv
+)
+
+if [ "${HAS_ROLE}" = "0" ]; then
+  echo "Assigning Key Vault Secrets Officer role to current operator..."
+
+  az role assignment create \
+    --assignee-object-id "${MY_OBJECT_ID}" \
+    --role "Key Vault Secrets Officer" \
+    --scope "${KV_SCOPE}" \
+    >/dev/null
+
+  echo "Waiting for RBAC propagation..."
+  sleep 30
+else
+  echo "Operator already has Key Vault Secrets Officer role."
+fi
+
+echo
+
 #
 # Verify ClusterSecretStore is healthy
 #
