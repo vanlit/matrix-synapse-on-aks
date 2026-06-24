@@ -24,3 +24,6 @@ export BLOB_BACKUP_CONTAINER="postgres-backups"
 export TRAEFIK_PUBLIC_IP_NAME="matrix-traefik-ip"
 
 export ARGO_NS="matrix-argocd"
+
+export TRAEFIK_NAMESPACE="traefik"
+export TRAEFIK_PUBLIC_IP_NAME="matrix-traefik-pubip"
