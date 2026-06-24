@@ -33,11 +33,6 @@ az role assignment create \
   --scope "$PUBLIC_IP_ID" \
   >/dev/null
 
-if [ -z "$PUBLIC_IP" ]; then
-  echo "ERROR: Public IP not found"
-  exit 1
-fi
-
 
 echo "2 - Resolving Public previously-created IP for traefik..."
 
@@ -48,6 +43,11 @@ PUBLIC_IP=$(
     --query ipAddress \
     -o tsv
 )
+
+if [ -z "$PUBLIC_IP" ]; then
+  echo "ERROR: Public IP not found"
+  exit 1
+fi
 
 echo "Public IP: $PUBLIC_IP"
 echo
