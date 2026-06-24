@@ -46,7 +46,6 @@ HAS_ROLE=$(
   az role assignment list \
     --assignee "${MY_OBJECT_ID}" \
     --scope "${KV_SCOPE}" \
-    --all \
     --query "[?roleDefinitionName=='Key Vault Secrets Officer'] | length(@)" \
     -o tsv
 )
