@@ -47,8 +47,8 @@ echo "4 - Installing Traefik..."
 helm upgrade --install traefik traefik/traefik \
   --namespace "$TRAEFIK_NAMESPACE" \
   --set service.type=LoadBalancer \
-  --set metadata.annotatoins.service.beta.kubernetes.io/azure-pip-name=$TRAEFIK_PUBLIC_IP_NAME \
-  --set metadata.annotatoins.service.beta.kubernetes.io/azure-load-balancer-resource-group: $AKS_RG_NAME \
+  --set service.annotations."service\.beta\.kubernetes\.io/azure-pip-name"="$TRAEFIK_PUBLIC_IP_NAME" \
+  --set service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-resource-group"="$AKS_RG_NAME" \
   --set ingressRoute.dashboard.enabled=true \
   --set metrics.prometheus.enabled=true
 
