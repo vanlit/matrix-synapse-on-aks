@@ -3,8 +3,10 @@ set -euo pipefail
 
 . ./cfg.sh
 
-TEST_SECRET_NAME="eso-test-secret"
-TEST_SECRET_VALUE="hello-matrix-$(date +%s)"
+TEST_RUN_ID=$(date +%s)
+
+TEST_SECRET_NAME="eso-test-secret-${TEST_RUN_ID}"
+TEST_SECRET_VALUE="hello-matrix-${TEST_RUN_ID}"
 
 cleanup() {
   echo
