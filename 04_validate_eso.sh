@@ -55,6 +55,7 @@ if [ "${HAS_ROLE}" = "0" ]; then
 
   az role assignment create \
     --assignee-object-id "${MY_OBJECT_ID}" \
+    --assignee-principal-type User \
     --role "Key Vault Secrets Officer" \
     --scope "${KV_SCOPE}" \
     >/dev/null
