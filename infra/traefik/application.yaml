@@ -58,9 +58,15 @@ spec:
 
         # for ACME
         additionalArguments:
+          - "--entrypoints.web.address=:80"
+          - "--entrypoints.websecure.address=:443"
+
           - "--certificatesresolvers.le.acme.email=admin@wanil.pl"
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
+
+          # FORCE HTTP-01 ONLY
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+          - "--certificatesresolvers.le.acme.tlschallenge=false"
 
         # Persistence for ACME cert storage
         additionalVolumeMounts:
