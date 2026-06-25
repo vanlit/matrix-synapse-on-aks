@@ -1,7 +1,8 @@
+---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: root
+  name: traefik
   namespace: matrix-argocd
 
 spec:
@@ -10,13 +11,16 @@ spec:
   source:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
-    path: infra
+    path: infra/traefik
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: traefik
 
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
