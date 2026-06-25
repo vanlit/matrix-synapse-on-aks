@@ -10,8 +10,8 @@ spec:
     - websecure
 
   routes:
-    - match: Host(`argocd.${TOP_DOMAIN}`)
-      kind: Rule
+    - kind: Rule
+      match: Host(`argocd.${TOP_DOMAIN}`)
       services:
         - name: argocd-server
           port: 80

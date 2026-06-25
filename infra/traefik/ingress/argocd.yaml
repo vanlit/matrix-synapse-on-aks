@@ -10,8 +10,8 @@ spec:
     - websecure
 
   routes:
-    - match: Host(`argocd.wanil.pl`)
-      kind: Rule
+    - kind: Rule
+      match: Host(`argocd.wanil.pl`)
       services:
         - name: argocd-server
           port: 80
