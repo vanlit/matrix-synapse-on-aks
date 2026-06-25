@@ -6,10 +6,8 @@ metadata:
 
 spec:
   entryPoints:
-    - web:
-      address: ":80"
-    - websecure:
-      address: ":443"
+    - web
+    - websecure
 
   routes:
     - match: Host(`argocd.wanil.pl`)
