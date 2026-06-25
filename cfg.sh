@@ -26,3 +26,5 @@ export TRAEFIK_PUBLIC_IP_NAME="matrix-traefik-ip"
 export ARGO_NS="matrix-argocd"
 
 export TRAEFIK_NAMESPACE="traefik"
+
+export TOP_DOMAIN=wanil.pl
