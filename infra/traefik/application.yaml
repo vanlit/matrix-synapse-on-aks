@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: traefik
+  namespace: matrix-argocd
+spec:
+  project: default
+
+  source:
+    repoURL: https://traefik.github.io/charts
+    chart: traefik
+    targetRevision: 41.0.0
+    helm:
+      values: |
+        service:
+          type: LoadBalancer
+          annotations:
+            service.beta.kubernetes.io/azure-pip-name: matrix-traefik-ip
+            service.beta.kubernetes.io/azure-load-balancer-resource-group: matrix-rg
+
+        ingressRoute:
+          dashboard:
+            enabled: true
+
+        metrics:
+          prometheus:
+            enabled: true
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: traefik
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
