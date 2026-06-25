@@ -51,18 +51,6 @@ spec:
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
           - "--certificatesresolvers.le.acme.tlschallenge=false"
 
-        # EntryPoints configuration (correct structure for v3 + chart 41.x)
-        entryPoints:
-          web:
-            address: ":80"
-            http:
-              redirections:
-                entryPoint:
-                  to: websecure
-                  scheme: https
-          websecure:
-            address: ":443"
-
         persistence:
           enabled: true
           path: /data
