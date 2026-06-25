@@ -31,14 +31,14 @@ spec:
           websecure:
             address: ":443"
 
-        certificatesResolvers:
-          myresolver:
-            acme:
-              email: "contact@wanil.pl"
-              storage: "/data/acme.json"       # Path to store the certificate information.
-              httpChallenge:
-                # Entry point to use during the ACME HTTP-01 challenge.
-                entryPoint: "web"
+        ingressRoute:
+          dashboard:
+            enabled: true
+            matchRule: Host(`dashboard.docker.localhost`)
+            entryPoints:
+              - websecure
+            middlewares:
+              - name: dashboard-auth
 
   destination:
     server: https://kubernetes.default.svc
