@@ -11,6 +11,8 @@ spec:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
     path: infra
+    directory:
+      recurse: true
 
   destination:
     server: https://kubernetes.default.svc
