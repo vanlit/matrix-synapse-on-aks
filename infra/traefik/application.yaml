@@ -16,7 +16,18 @@ spec:
       values: |
         entryPoints:
           web:
-            address: ":80"
+            address: :80
+            http:
+              redirections:
+                entryPoint:
+                  to: websecure
+                  scheme: https
+                  permanent: true
+            observability:
+              accessLogs: false
+              metrics: false
+              tracing: false
+
           websecure:
             address: ":443"
 
