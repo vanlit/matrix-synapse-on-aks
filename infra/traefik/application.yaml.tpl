@@ -17,6 +17,15 @@ spec:
         deployment:
           replicas: 1
 
+        # =========================
+        # FIX: Explicit entryPoints (CRITICAL for ACME)
+        # =========================
+        entryPoints:
+          web:
+            address: ":80"
+          websecure:
+            address: ":443"
+
         service:
           type: LoadBalancer
           annotations:
@@ -47,21 +56,13 @@ spec:
           prometheus:
             enabled: true
 
+        # for ACME
         additionalArguments:
-          - "--entrypoints.web.address=:80"
-          - "--entrypoints.websecure.address=:443"
-
-          # ACME / Let's Encrypt
           - "--certificatesresolvers.le.acme.email=admin@${TOP_DOMAIN}"
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
 
-        # =========================
-        # Ensure pod gets volume mounted
-        # =========================
-        deployment:
-          initContainers: []
-
+        # Persistence for ACME cert storage
         additionalVolumeMounts:
           - name: traefik-acme
             mountPath: /data
