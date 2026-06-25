@@ -63,11 +63,6 @@ spec:
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
           - "--certificatesresolvers.le.acme.tlschallenge=false"
 
-        # Persistence for ACME cert storage
-        additionalVolumeMounts:
-          - name: traefik-acme
-            mountPath: /data
-
         additionalVolumes:
           - name: traefik-acme
             persistentVolumeClaim:
