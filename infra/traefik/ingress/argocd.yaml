@@ -3,3 +3,17 @@ kind: IngressRoute
 metadata:
   name: argocd
   namespace: matrix-argocd
+
+spec:
+  entryPoints:
+    - websecure
+
+  routes:
+    - match: Host(`argocd.wanil.pl`)
+      kind: Rule
+      services:
+        - name: argocd-server
+          port: 80
+
+  tls:
+    certResolver: le

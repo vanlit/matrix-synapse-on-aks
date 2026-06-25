@@ -3,3 +3,17 @@ kind: IngressRoute
 metadata:
   name: argocd
   namespace: ${ARGO_NS}
+
+spec:
+  entryPoints:
+    - websecure
+
+  routes:
+    - match: Host(`argocd.${TOP_DOMAIN}`)
+      kind: Rule
+      services:
+        - name: argocd-server
+          port: 80
+
+  tls:
+    certResolver: le
