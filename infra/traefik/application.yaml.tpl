@@ -40,6 +40,17 @@ spec:
             middlewares:
               - name: dashboard-auth
 
+        additionalArguments:
+          - "--certificatesresolvers.le.acme.email=contact@${TOP_DOMAIN}"
+          - "--certificatesresolvers.le.acme.storage=/data/acme.json"
+          - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+
+        persistence:
+          enabled: true
+          name: data
+          size: 1Gi
+          storageClass: ""
+
   destination:
     server: https://kubernetes.default.svc
     namespace: traefik

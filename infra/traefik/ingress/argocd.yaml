@@ -17,4 +17,4 @@ spec:
           port: 80
 
   tls:
-    certResolver: default
+    certResolver: le
