@@ -60,6 +60,21 @@ spec:
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
 
+        # =========================
+        # Ensure pod gets volume mounted
+        # =========================
+        deployment:
+          initContainers: []
+
+        additionalVolumeMounts:
+          - name: traefik-acme
+            mountPath: /data
+
+        additionalVolumes:
+          - name: traefik-acme
+            persistentVolumeClaim:
+              claimName: traefik-acme
+
         persistence:
           enabled: true
           path: /data
