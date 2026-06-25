@@ -7,7 +7,7 @@ spec:
   project: default
 
   source:
-    repoURL: git@github.com:vanlit/matrix-synapse-on-aks.git
+    repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
     path: infra
 
