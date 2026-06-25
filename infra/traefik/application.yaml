@@ -17,13 +17,6 @@ spec:
         deployment:
           replicas: 1
 
-        # Explicit entryPoints (CRITICAL for ACME)
-        entryPoints:
-          web:
-            address: ":80"
-          websecure:
-            address: ":443"
-
         service:
           type: LoadBalancer
           annotations:
@@ -46,10 +39,6 @@ spec:
           kubernetesIngress:
             enabled: true
 
-        logs:
-          general:
-            level: INFO
-
         metrics:
           prometheus:
             enabled: true
@@ -62,11 +51,6 @@ spec:
           # FORCE HTTP-01 ONLY
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
           - "--certificatesresolvers.le.acme.tlschallenge=false"
-
-        additionalVolumes:
-          - name: traefik-acme
-            persistentVolumeClaim:
-              claimName: traefik-acme
 
         persistence:
           enabled: true
