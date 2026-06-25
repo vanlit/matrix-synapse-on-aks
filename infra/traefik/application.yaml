@@ -29,10 +29,6 @@ spec:
           websecure:
             exposedPort: 443
 
-        ingressClass:
-          enabled: true
-          isDefaultClass: true
-
         ingressRoute:
           dashboard:
             enabled: true

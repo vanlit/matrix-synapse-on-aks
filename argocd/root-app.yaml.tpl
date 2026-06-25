@@ -11,14 +11,29 @@ spec:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
     path: infra
+
     directory:
       recurse: true
+      jsonnet: {}
+      exclude: "**/*.tpl"
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: ${ARGO_NS}
 
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=false
+      - PrunePropagationPolicy=foreground
+      - ApplyOutOfSyncOnly=true
+      - RespectIgnoreDifferences=true
+
+  ignoreDifferences:
+    - group: argoproj.io
+      kind: Application
+      jsonPointers:
+        - /status
