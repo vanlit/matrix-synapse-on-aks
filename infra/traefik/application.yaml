@@ -17,9 +17,7 @@ spec:
         deployment:
           replicas: 1
 
-        # =========================
-        # FIX: Explicit entryPoints (CRITICAL for ACME)
-        # =========================
+        # Explicit entryPoints (CRITICAL for ACME)
         entryPoints:
           web:
             address: ":80"
@@ -58,9 +56,6 @@ spec:
 
         # for ACME
         additionalArguments:
-          - "--entrypoints.web.address=:80"
-          - "--entrypoints.websecure.address=:443"
-
           - "--certificatesresolvers.le.acme.email=admin@wanil.pl"
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
 
