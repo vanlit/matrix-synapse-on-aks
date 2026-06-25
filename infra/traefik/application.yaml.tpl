@@ -3,6 +3,7 @@ kind: Application
 metadata:
   name: traefik
   namespace: ${ARGO_NS}
+
 spec:
   project: default
 
@@ -10,21 +11,59 @@ spec:
     repoURL: https://traefik.github.io/charts
     chart: traefik
     targetRevision: 41.0.0
+
     helm:
       values: |
+        deployment:
+          replicas: 1
+
         service:
           type: LoadBalancer
           annotations:
             service.beta.kubernetes.io/azure-pip-name: ${TRAEFIK_PUBLIC_IP_NAME}
             service.beta.kubernetes.io/azure-load-balancer-resource-group: ${AKS_RG_NAME}
 
+        ports:
+          web:
+            exposedPort: 80
+          websecure:
+            exposedPort: 443
+
+        ingressClass:
+          enabled: true
+          isDefaultClass: true
+
         ingressRoute:
           dashboard:
             enabled: true
 
+        providers:
+          kubernetesCRD:
+            enabled: true
+          kubernetesIngress:
+            enabled: true
+
+        logs:
+          general:
+            level: INFO
+
         metrics:
           prometheus:
             enabled: true
+
+        additionalArguments:
+          - "--entrypoints.web.address=:80"
+          - "--entrypoints.websecure.address=:443"
+
+          # ACME / Let's Encrypt
+          - "--certificatesresolvers.le.acme.email=admin@${TOP_DOMAIN}"
+          - "--certificatesresolvers.le.acme.storage=/data/acme.json"
+          - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+
+        persistence:
+          enabled: true
+          path: /data
+          size: 128Mi
 
   destination:
     server: https://kubernetes.default.svc
@@ -34,5 +73,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
     syncOptions:
       - CreateNamespace=true
