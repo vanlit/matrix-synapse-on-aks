@@ -20,8 +20,8 @@ spec:
   data:
     - secretKey: username
       remoteRef:
-        key: $KV_MATRIX_POSTGRES_USERNAME
+        key: ${KV_MATRIX_POSTGRES_USERNAME}
 
     - secretKey: password
       remoteRef:
-        key: $KV_MATRIX_POSTGRES_PASSWORD
+        key: ${KV_MATRIX_POSTGRES_PASSWORD}
