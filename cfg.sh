@@ -36,7 +36,8 @@ export POSTGRES_RELEASE_NAME="cnpg"
 
 
 export KV_REDIS_PASSWORD="redis-password"
-export KV_POSTGRES_PASSWORD="postgres-password"
+export KV_MATRIX_POSTGRES_USERNAME="matrix-postgres-username"
+export KV_MATRIX_POSTGRES_PASSWORD="postgres-password"
 export KV_SYNAPSE_REGISTRATION_SECRET="synapse-registration-secret"
 export KV_SYNAPSE_MACAROON_SECRET="synapse-macaroon-secret"
 export KV_SYNAPSE_FORM_SECRET="synapse-form-secret"

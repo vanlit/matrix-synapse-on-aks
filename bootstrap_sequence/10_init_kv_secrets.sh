@@ -32,15 +32,20 @@ rand64() {
 echo
 echo "Generating platform secrets..."
 
-create_secret $KV_REDIS_PASSWORD                  "$(rand64)"
-create_secret $KV_POSTGRES_PASSWORD               "$(rand64)"
-create_secret $KV_SYNAPSE_REGISTRATION_SECRET     "$(rand64)"
-create_secret $KV_SYNAPSE_MACAROON_SECRET         "$(rand64)"
-create_secret $KV_SYNAPSE_FORM_SECRET             "$(rand64)"
-create_secret $KV_TURN_STATIC_AUTH_SECRET         "$(rand64)"
-create_secret $KV_AUTHELIA_JWT_SECRET             "$(rand64)"
-create_secret $KV_AUTHELIA_SESSION_SECRET         "$(rand64)"
-create_secret $KV_AUTHELIA_STORAGE_ENCRYPTION_KEY "$(rand64)"
+create_secret $KV_REDIS_PASSWORD                    "$(rand64)"
+
+create-secret $KV_MATRIX_POSTGRES_USERNAME "matrix"
+create_secret $KV_MATRIX_POSTGRES_PASSWORD          "$(rand64)"
+
+
+create_secret $KV_SYNAPSE_REGISTRATION_SECRET       "$(rand64)"
+create_secret $KV_SYNAPSE_MACAROON_SECRET           "$(rand64)"
+create_secret $KV_SYNAPSE_FORM_SECRET               "$(rand64)"
+create_secret $KV_TURN_STATIC_AUTH_SECRET           "$(rand64)"
+create_secret $KV_AUTHELIA_JWT_SECRET               "$(rand64)"
+create_secret $KV_AUTHELIA_SESSION_SECRET           "$(rand64)"
+create_secret $KV_AUTHELIA_STORAGE_ENCRYPTION_KEY   "$(rand64)"
+
 
 echo
 echo "Key Vault successfully seeded."
