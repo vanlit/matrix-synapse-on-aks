@@ -3,6 +3,6 @@ set -euo pipefail
 
 . ./cfg.sh
 
-echo "Rendering ArgoCD manifests..."
+echo "Rendering ArgoCD manifest..."
 
-envsubst < infra/traefik/application.yaml.tpl | kubectl apply -f -
+envsubst < argocd/root-app.yaml.tpl | kubectl apply -f -
