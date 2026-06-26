@@ -3,4 +3,6 @@ set -euo pipefail
 
 ./flow/fill-tpl-from-cfg.sh
 
+./flow/copy-root-app-yaml.sh
+
 git add '*.yaml'
