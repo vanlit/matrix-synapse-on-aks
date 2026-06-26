@@ -33,3 +33,14 @@ export POSTGRES_NAMESPACE="cloudnative-pg"
 
 export REDIS_RELEASE_NAME="redis"
 export POSTGRES_RELEASE_NAME="cnpg"
+
+
+export KV_REDIS_PASSWORD="redis-password"
+export KV_POSTGRES_PASSWORD="postgres-password"
+export KV_SYNAPSE_REGISTRATION_SECRET="synapse-registration-secret"
+export KV_SYNAPSE_MACAROON_SECRET="synapse-macaroon-secret"
+export KV_SYNAPSE_FORM_SECRET="synapse-form-secret"
+export KV_TURN_STATIC_AUTH_SECRET="turn-static-auth-secret"
+export KV_AUTHELIA_JWT_SECRET="authelia-jwt-secret"
+export KV_AUTHELIA_SESSION_SECRET="authelia-session-secret"
+export KV_AUTHELIA_STORAGE_ENCRYPTION_KEY="authelia-storage-encryption-key"
