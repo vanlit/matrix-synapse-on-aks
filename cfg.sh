@@ -1,6 +1,7 @@
 #!/bin/sh
 
 export REGION=westeurope
+export TOP_DOMAIN=wanil.pl
 
 export CLUSTER_NODE_COUNT=1
 export AKS_RG_NAME=matrix-rg
@@ -27,4 +28,8 @@ export ARGO_NS="matrix-argocd"
 
 export TRAEFIK_NAMESPACE="traefik"
 
-export TOP_DOMAIN=wanil.pl
+export REDIS_NAMESPACE="redis"
+export POSTGRES_NAMESPACE="cloudnative-pg"
+
+export REDIS_RELEASE_NAME="redis"
+export POSTGRES_RELEASE_NAME="cnpg"
