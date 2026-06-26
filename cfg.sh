@@ -34,7 +34,9 @@ export POSTGRES_NAMESPACE="cloudnative-pg"
 export REDIS_RELEASE_NAME="redis"
 export POSTGRES_RELEASE_NAME="cnpg"
 
-
+export KV_DOCKERSRC_SERVER="docker-registry-server"
+export KV_DOCKERSRC_USERNAME="docker-registry-username"
+export KV_DOCKERSRC_PASSWORD="docker-registry-password"
 export KV_REDIS_PASSWORD="redis-password"
 export KV_MATRIX_POSTGRES_USERNAME="matrix-postgres-username"
 export KV_MATRIX_POSTGRES_PASSWORD="postgres-password"

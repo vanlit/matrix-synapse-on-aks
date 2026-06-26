@@ -1,0 +1,21 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: sync-registry-pullsecret-to-namespaces
+spec:
+  background: true
+  rules:
+    - name: copy-registry-secret-on-namespace-create
+      match:
+        resources:
+          kinds:
+            - Namespace
+      generate:
+        apiVersion: v1
+        kind: Secret
+        name: registry-pullsecret
+        namespace: "{{ request.object.metadata.name }}"
+        synchronize: true
+        clone:
+          namespace: ${ARGO_NS}
+          name: registry-pullsecret
