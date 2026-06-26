@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-source "$(dirname "$0")/../env.sh"
+source "$(dirname "$0")/../cfg.sh"
 
 echo "Seeding Azure Key Vault: ${KV_NAME}"
 
