@@ -2,6 +2,8 @@ apiVersion: kyverno.io/v1
 kind: ClusterPolicy
 metadata:
   name: sync-registry-pullsecret-to-namespaces
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 spec:
   background: true
   rules:

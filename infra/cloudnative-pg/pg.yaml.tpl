@@ -3,6 +3,8 @@ kind: Application
 metadata:
   name: cloudnative-pg
   namespace: ${ARGO_NS}
+  annotations:
+    argocd.argoproj.io/sync-wave: "20"
 
 spec:
   project: default

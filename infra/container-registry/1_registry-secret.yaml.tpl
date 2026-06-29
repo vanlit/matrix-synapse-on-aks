@@ -3,6 +3,8 @@ kind: ExternalSecret
 metadata:
   name: registry-pullsecret
   namespace: ${ARGO_NS}
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
 
 spec:
   refreshInterval: 1h
