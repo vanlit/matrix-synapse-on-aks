@@ -15,10 +15,13 @@ spec:
   source:
     repoURL: https://kyverno.github.io/kyverno/
     chart: kyverno
-    targetRevision: 3.5.2   # or the latest stable you're pinning to
+    targetRevision: 3.5.2
 
     helm:
       releaseName: kyverno
+      values: |
+        installCRDs: true
+
 
   syncPolicy:
     automated:
