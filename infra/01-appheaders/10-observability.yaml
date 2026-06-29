@@ -1,0 +1,6 @@
+kind: Application
+metadata:
+  name: platform
+spec:
+  source:
+    path: infra/10-observability
