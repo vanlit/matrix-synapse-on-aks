@@ -13,7 +13,7 @@ spec:
     path: infra
 
     directory:
-      recurse: true
+      recurse: false
       jsonnet: {}
       exclude: "**/*.tpl"
 
