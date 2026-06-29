@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kyverno
+  namespace: argocd
+spec:
+  project: default
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: kyverno
+
+  source:
+    repoURL: https://kyverno.github.io/kyverno/
+    chart: kyverno
+    targetRevision: 3.5.2   # or the latest stable you're pinning to
+
+    helm:
+      releaseName: kyverno
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
