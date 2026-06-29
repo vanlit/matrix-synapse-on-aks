@@ -17,23 +17,22 @@ echo
 
 echo "Writing secrets to Azure Key Vault..."
 
+echo "storign $KV_DOCKERSRC_SERVER ..."
 az keyvault secret set \
   --vault-name "$KV_NAME" \
   --name "$KV_DOCKERSRC_SERVER" \
   --value "https://index.docker.io/v2/" > /dev/null
 
+echo "storign $KV_DOCKERSRC_USERNAME ..."
 az keyvault secret set \
   --vault-name "$KV_NAME" \
   --name "$KV_DOCKERSRC_USERNAME" \
   --value "$DOCKER_USER" > /dev/null
 
+echo "storign $KV_DOCKERSRC_PASSWORD ..."
 az keyvault secret set \
   --vault-name "$KV_NAME" \
   --name "$KV_DOCKERSRC_PASSWORD" \
   --value "$DOCKER_PASS" > /dev/null
 
 echo "Done."
-
-echo "Stored secrets:"
-echo " - $USER_SECRET_NAME"
-echo " - $PASS_SECRET_NAME"
