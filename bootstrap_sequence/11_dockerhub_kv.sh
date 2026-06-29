@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Load shared env if you keep it in a file
-. ./src.sh
+. ./cfg.sh
 
 : "${KV_NAME:?KV_NAME is not set}"
 
