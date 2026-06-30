@@ -26,7 +26,7 @@ helm upgrade --install argocd argo/argo-cd \
 echo "4 - Waiting for ArgoCD deployments... (timeout after 300s)"
 kubectl rollout status deploy/argocd-server -n "${ARGO_NS}" --timeout=300s
 kubectl rollout status deploy/argocd-repo-server -n "${ARGO_NS}" --timeout=300s
-kubectl rollout status deploy/argocd-application-controller -n "${ARGO_NS}" --timeout=300s
+kubectl rollout status deploy/argocd-applicationset-controller -n "${ARGO_NS}" --timeout=300s
 echo "Success, ArgoCD pods are Ready"
 
 echo
