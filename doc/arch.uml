@@ -141,6 +141,8 @@ argocd ..> pg
 argocd ..> redis
 argocd ..> prometheus
 argocd ..> eso
+argocd ..> github : fetch repo,\n periodically
+
 
 ' =========================
 ' SECRETS (PINK)
