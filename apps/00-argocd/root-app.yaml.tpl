@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: root
-  namespace: matrix-argocd
+  namespace: ${ARGO_NS}
 
 spec:
   project: default
@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
-    path: infra
+    path: argocd
 
     directory:
       recurse: false
@@ -19,7 +19,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: matrix-argocd
+    namespace: ${ARGO_NS}
 
   syncPolicy:
     automated:
