@@ -11,11 +11,10 @@ spec:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
     path: apps/03-config
-
-  directory:
-    recurse: false
-    jsonnet: {}
-    exclude: "**/*.tpl"
+    directory:
+      recurse: false
+      jsonnet: {}
+      exclude: "**/*.tpl"
 
   destination:
     server: https://kubernetes.default.svc
