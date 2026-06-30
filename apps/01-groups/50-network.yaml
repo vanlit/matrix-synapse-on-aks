@@ -3,4 +3,4 @@ metadata:
   name: platform
 spec:
   source:
-    path: infra/20-auth
+    path: apps/50-network

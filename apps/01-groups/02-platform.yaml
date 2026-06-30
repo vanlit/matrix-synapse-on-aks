@@ -3,4 +3,4 @@ metadata:
   name: platform
 spec:
   source:
-    path: infra/50-network
+    path: apps/02-platform

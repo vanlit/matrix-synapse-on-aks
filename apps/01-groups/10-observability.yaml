@@ -3,4 +3,4 @@ metadata:
   name: platform
 spec:
   source:
-    path: infra/40-matrix
+    path: apps/10-observability

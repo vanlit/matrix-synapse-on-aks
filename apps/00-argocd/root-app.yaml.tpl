@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
-    path: argocd
+    path: apps/01-groups
 
     directory:
       recurse: false
