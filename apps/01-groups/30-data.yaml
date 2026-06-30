@@ -1,6 +1,17 @@
+apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: data
+  namespace: matrix-argocd
+
 spec:
+  project: default
+
   source:
+    repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
+    targetRevision: main
     path: apps/30-data
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: matrix-argocd
