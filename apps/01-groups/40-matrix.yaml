@@ -1,6 +1,6 @@
 kind: Application
 metadata:
-  name: platform
+  name: matrix
 spec:
   source:
     path: apps/40-matrix

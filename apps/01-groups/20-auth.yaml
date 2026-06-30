@@ -1,6 +1,6 @@
 kind: Application
 metadata:
-  name: platform
+  name: auth
 spec:
   source:
     path: apps/20-auth

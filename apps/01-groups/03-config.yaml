@@ -1,6 +1,6 @@
 kind: Application
 metadata:
-  name: platform
+  name: config
 spec:
   source:
     path: apps/03-config

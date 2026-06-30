@@ -1,6 +1,6 @@
 kind: Application
 metadata:
-  name: platform
+  name: network
 spec:
   source:
     path: apps/50-network

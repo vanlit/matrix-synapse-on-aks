@@ -1,6 +1,6 @@
 kind: Application
 metadata:
-  name: platform
+  name: observability
 spec:
   source:
     path: apps/10-observability
