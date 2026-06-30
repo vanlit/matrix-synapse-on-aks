@@ -12,6 +12,11 @@ spec:
     targetRevision: main
     path: apps/20-auth
 
+  directory:
+    recurse: false
+    jsonnet: {}
+    exclude: "**/*.tpl"
+
   destination:
     server: https://kubernetes.default.svc
     namespace: matrix-argocd
