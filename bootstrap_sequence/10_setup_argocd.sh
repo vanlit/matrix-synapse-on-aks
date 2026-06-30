@@ -10,27 +10,27 @@ echo "ArgoCD Bootstrap"
 echo "========================================"
 echo
 
-echo "1 - Creating namespace: ${ARGO_NS}"
+echo "### 1 - Creating namespace: ${ARGO_NS}"
 kubectl create namespace "${ARGO_NS}" --dry-run=client -o yaml | kubectl apply -f -
 
-echo "2 - Adding Argo Helm repo..."
+echo "### 2 - Adding Argo Helm repo..."
 helm repo add argo "${ARGO_HELM_REPO}" >/dev/null 2>&1 || true
 helm repo update >/dev/null
 
-echo "3 - Installing ArgoCD via Helm..."
+echo "### 3 - Installing ArgoCD via Helm..."
 helm upgrade --install argocd argo/argo-cd \
   --namespace "${ARGO_NS}" \
   --create-namespace \
   --set server.service.type=ClusterIP
 
-echo "4 - Waiting for ArgoCD deployments... (timeout after 300s)"
+echo "### 4 - Waiting for ArgoCD deployments... (timeout after 300s)"
 kubectl rollout status deploy/argocd-server -n "${ARGO_NS}" --timeout=300s
 kubectl rollout status deploy/argocd-repo-server -n "${ARGO_NS}" --timeout=300s
 kubectl rollout status deploy/argocd-applicationset-controller -n "${ARGO_NS}" --timeout=300s
 echo "Success, ArgoCD pods are Ready"
 
 echo
-echo "5 - Fetching initial admin password..."
+echo "### 5 - Fetching initial admin password..."
 ARGO_PWD=$(kubectl -n "${ARGO_NS}" get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 -d)
 
