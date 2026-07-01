@@ -1,3 +1,8 @@
+resource "tls_private_key" "aks_ssh" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 resource "azurerm_kubernetes_cluster" "main" {
   name                = local.aks_name
   location            = azurerm_resource_group.main.location
