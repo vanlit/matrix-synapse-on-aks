@@ -2,9 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: external-secrets
-  namespace: eso
-  annotations:
-    argocd.argoproj.io/sync-wave: "0"
+  namespace: ${ARGO_NS}
 spec:
   project: default
 

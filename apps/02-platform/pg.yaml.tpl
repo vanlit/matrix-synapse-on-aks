@@ -2,9 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: cloudnative-pg
-  namespace: cnpg
-  annotations:
-    argocd.argoproj.io/sync-wave: "20"
+  namespace: ${ARGO_NS}
 
 spec:
   project: default
