@@ -68,8 +68,8 @@ locals {
 resource "random_password" "generated" {
   for_each = local.generated_secrets
 
-  length           = each.value.length
-  special          = each.value.special
+  length  = each.value.length
+  special = each.value.special
 
   override_special = "!@#$%^&*()-=_+[]{};:"
 }
@@ -93,8 +93,8 @@ resource "azurerm_key_vault_secret" "generated" {
 # Static platform secrets
 ############################################################
 resource "azurerm_key_vault_secret" "matrix_postgres_username" {
-  name         = "matrix-postgres-username"
-  value        = "matrix"
+  name  = "matrix-postgres-username"
+  value = "matrix"
 
   key_vault_id = azurerm_key_vault.main.id
 
@@ -124,8 +124,8 @@ resource "azurerm_key_vault_secret" "docker-registry-username" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
-  name         = "docker-registry-username"
-  value        = var.dockerhub_username
+  name  = "docker-registry-username"
+  value = var.dockerhub_username
 
   key_vault_id = azurerm_key_vault.main.id
 
@@ -138,8 +138,8 @@ resource "azurerm_key_vault_secret" "docker-registry-password" {
 
   count = var.dockerhub_token != "" ? 1 : 0
 
-  name         = "docker-registry-password"
-  value        = var.dockerhub_token
+  name  = "docker-registry-password"
+  value = var.dockerhub_token
 
   key_vault_id = azurerm_key_vault.main.id
 

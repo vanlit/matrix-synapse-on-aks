@@ -16,9 +16,9 @@
 # as the Kubernetes ServiceAccount.
 #
 resource "azurerm_federated_identity_credential" "eso" {
-  name = "${local.name_prefix}-eso"
+  name                      = "${local.name_prefix}-eso"
   user_assigned_identity_id = azurerm_user_assigned_identity.managed["eso"].id
-  issuer = azurerm_kubernetes_cluster.main.oidc_issuer_url
+  issuer                    = azurerm_kubernetes_cluster.main.oidc_issuer_url
   audience = [
     "api://AzureADTokenExchange"
   ]
@@ -29,7 +29,7 @@ resource "azurerm_federated_identity_credential" "eso" {
 # Allow ESO to read secrets from Key Vault.
 #
 resource "azurerm_role_assignment" "eso_keyvault_reader" {
-  scope = azurerm_key_vault.main.id
+  scope                = azurerm_key_vault.main.id
   role_definition_name = "Key Vault Secrets User"
-  principal_id = azurerm_user_assigned_identity.managed["eso"].principal_id
+  principal_id         = azurerm_user_assigned_identity.managed["eso"].principal_id
 }

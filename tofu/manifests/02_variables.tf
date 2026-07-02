@@ -21,23 +21,23 @@ variable "tags" {
   type        = map(string)
   default = {
     terraformed_by = "opentofu"
-    managed_by = "argocd"
-    project    = "matrix"
+    managed_by     = "argocd"
+    project        = "matrix"
   }
 }
 
 variable "aks_node_count_min" {
-  type        = number
-  default     = 1
+  type    = number
+  default = 1
 }
 variable "aks_node_count_max" {
-  type        = number
-  default     = 1
+  type    = number
+  default = 1
 }
 
 variable "aks_node_vm_size" {
-  type        = string
-  default     = "Standard_D4s_v5"
+  type    = string
+  default = "Standard_D4s_v5"
 }
 
 variable "keyvault_sku" {
@@ -83,9 +83,9 @@ variable "storage_containers" {
   type = map(string)
 
   default = {
-    media   = "media"
-    wal     = "wal"
-    backup  = "backup"
+    media  = "media"
+    wal    = "wal"
+    backup = "backup"
   }
 }
 
@@ -95,7 +95,7 @@ variable "storage_containers" {
 variable "dockerhub_username" {
   type      = string
   sensitive = true
-  default = ""
+  default   = ""
 }
 variable "dockerhub_token" {
   type      = string
