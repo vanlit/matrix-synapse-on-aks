@@ -17,7 +17,6 @@
 #
 resource "azurerm_federated_identity_credential" "eso" {
   name = "${local.name_prefix}-eso"
-  resource_group_name = azurerm_resource_group.main.name
   parent_id = azurerm_user_assigned_identity.managed["eso"].id
   issuer = azurerm_kubernetes_cluster.main.oidc_issuer_url
   audience = [
