@@ -107,7 +107,7 @@ resource "azurerm_key_vault_secret" "matrix_postgres_username" {
 # DockerHub credentials
 ############################################################
 
-resource "azurerm_key_vault_secret" "dockerhub_server" {
+resource "azurerm_key_vault_secret" "docker-registry-server" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
@@ -120,7 +120,7 @@ resource "azurerm_key_vault_secret" "dockerhub_server" {
   ]
 }
 
-resource "azurerm_key_vault_secret" "dockerhub_username" {
+resource "azurerm_key_vault_secret" "docker-registry-username" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
@@ -134,7 +134,7 @@ resource "azurerm_key_vault_secret" "dockerhub_username" {
   ]
 }
 
-resource "azurerm_key_vault_secret" "dockerhub_token" {
+resource "azurerm_key_vault_secret" "docker-registry-password" {
 
   count = var.dockerhub_token != "" ? 1 : 0
 
