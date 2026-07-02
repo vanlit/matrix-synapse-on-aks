@@ -1,0 +1,1 @@
+tofu apply plan.tofu

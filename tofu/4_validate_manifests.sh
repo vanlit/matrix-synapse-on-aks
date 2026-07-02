@@ -2,4 +2,4 @@ tofu fmt -recursive
 
 tofu validate
 
-tofu plan
+tofu plan -out=plan.tofu
