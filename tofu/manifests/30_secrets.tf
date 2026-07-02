@@ -111,7 +111,7 @@ resource "azurerm_key_vault_secret" "docker-registry-server" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
-  name         = "dockerhub-server"
+  name         = "docker-registry-server"
   value        = "https://index.docker.io/v2/"
   key_vault_id = azurerm_key_vault.main.id
 
@@ -124,7 +124,7 @@ resource "azurerm_key_vault_secret" "docker-registry-username" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
-  name         = "dockerhub-username"
+  name         = "docker-registry-username"
   value        = var.dockerhub_username
 
   key_vault_id = azurerm_key_vault.main.id
@@ -138,7 +138,7 @@ resource "azurerm_key_vault_secret" "docker-registry-password" {
 
   count = var.dockerhub_token != "" ? 1 : 0
 
-  name         = "dockerhub-password"
+  name         = "docker-registry-password"
   value        = var.dockerhub_token
 
   key_vault_id = azurerm_key_vault.main.id
