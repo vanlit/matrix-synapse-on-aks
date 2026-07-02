@@ -16,12 +16,9 @@ locals {
     }
 
     storage = {
-      account    = azurerm_storage_account.main.name
+      account       = azurerm_storage_account.main.name
       blob_endpoint = azurerm_storage_account.main.primary_blob_endpoint
-
-      containers = [
-        for c in azurerm_storage_container.platform : c.name
-      ]
+      containers    = keys(azurerm_storage_container.platform)
     }
 
     traefik = {
@@ -30,8 +27,15 @@ locals {
     }
 
     identities = {
-      managed_identity_client_ids = local.managed_identity_client_ids
-      managed_identity_principal_ids = local.managed_identity_principal_ids
+      managed_identity_client_ids = {
+        for k, v in azurerm_user_assigned_identity.managed :
+        k => v.client_id
+      }
+
+      managed_identity_principal_ids = {
+        for k, v in azurerm_user_assigned_identity.managed :
+        k => v.principal_id
+      }
     }
 
     environment = {
@@ -40,12 +44,7 @@ locals {
   }
 }
 
-############################################################
-# Materialize to local filesystem
-############################################################
-
 resource "local_file" "gitops_exports" {
   filename = pathexpand("~/matrix-tofu-outputs.json")
-
-  content = jsonencode(local.gitops_exports)
+  content  = jsonencode(local.gitops_exports)
 }
