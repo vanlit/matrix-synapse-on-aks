@@ -1,1 +1,1 @@
-tofu apply plan.tofu
+tofu apply plan.tfplan
