@@ -102,3 +102,19 @@ variable "dockerhub_token" {
   sensitive = true
   default = ""
 }
+
+
+##################
+# GitOps source
+##################
+variable "gitops_repository" {
+  description = "Git repository containing Kubernetes manifests"
+  type        = string
+  default     = "https://github.com/vanlit/matrix-synapse-on-aks.git"
+}
+
+variable "gitops_revision" {
+  description = "Git revision to sync"
+  type        = string
+  default     = "main"
+}
