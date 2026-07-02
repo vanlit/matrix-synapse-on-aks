@@ -1,4 +1,16 @@
 ############################################################
+# Give access to myself
+############################################################
+
+data "azurerm_client_config" "current" {}
+
+resource "azurerm_role_assignment" "current_user_kv_secrets_officer" {
+  scope                = azurerm_key_vault.main.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = data.azurerm_client_config.current.object_id
+}
+
+############################################################
 # Platform-generated secrets
 ############################################################
 
@@ -73,6 +85,10 @@ resource "azurerm_key_vault_secret" "generated" {
   name         = each.key
   value        = each.value.result
   key_vault_id = azurerm_key_vault.main.id
+
+  depends_on = [
+    azurerm_role_assignment.current_user_kv_secrets_officer
+  ]
 }
 
 ############################################################
@@ -83,6 +99,10 @@ resource "azurerm_key_vault_secret" "matrix_postgres_username" {
   value        = "matrix"
 
   key_vault_id = azurerm_key_vault.main.id
+
+  depends_on = [
+    azurerm_role_assignment.current_user_kv_secrets_officer
+  ]
 }
 
 ############################################################
@@ -97,6 +117,9 @@ resource "azurerm_key_vault_secret" "dockerhub_server" {
   value        = "https://index.docker.io/v2/"
   key_vault_id = azurerm_key_vault.main.id
 
+  depends_on = [
+    azurerm_role_assignment.current_user_kv_secrets_officer
+  ]
 }
 
 resource "azurerm_key_vault_secret" "dockerhub_username" {
@@ -108,6 +131,9 @@ resource "azurerm_key_vault_secret" "dockerhub_username" {
 
   key_vault_id = azurerm_key_vault.main.id
 
+  depends_on = [
+    azurerm_role_assignment.current_user_kv_secrets_officer
+  ]
 }
 
 resource "azurerm_key_vault_secret" "dockerhub_token" {
@@ -119,4 +145,7 @@ resource "azurerm_key_vault_secret" "dockerhub_token" {
 
   key_vault_id = azurerm_key_vault.main.id
 
+  depends_on = [
+    azurerm_role_assignment.current_user_kv_secrets_officer
+  ]
 }
