@@ -19,3 +19,14 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: matrix-argocd
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
+      - PrunePropagationPolicy=foreground
+      - ApplyOutOfSyncOnly=true
+      - RespectIgnoreDifferences=true
