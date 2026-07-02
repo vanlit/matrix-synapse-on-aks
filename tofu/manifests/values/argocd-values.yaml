@@ -1,0 +1,22 @@
+server:
+  service:
+    type: ClusterIP
+
+configs:
+  params:
+    server.insecure: "true"
+
+controller:
+  replicas: 1
+
+repoServer:
+  replicas: 1
+
+applicationSet:
+  replicaCount: 1
+
+redis:
+  enabled: true
+
+dex:
+  enabled: false
