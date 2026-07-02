@@ -24,7 +24,15 @@ resource "azurerm_kubernetes_cluster" "main" {
     auto_scaling_enabled = true
     min_count            = var.aks_node_count_min
     max_count            = var.aks_node_count_max
+
+    upgrade_settings {
+      drain_timeout_in_minutes      = 0
+      max_surge                     = "33%"
+      node_soak_duration_in_minutes = 0
+    }
   }
+
+
 
   # ------------------------------------------------------------
   # Identity (managed identity)
