@@ -2,4 +2,5 @@ tofu fmt -recursive
 
 tofu validate
 
-tofu plan -out=plan.tofu
+rm plan.tofu
+tofu plan -no-color -out=plan.tofu
