@@ -21,8 +21,9 @@ resource "azurerm_kubernetes_cluster" "main" {
 
     type       = "VirtualMachineScaleSets"
 
-    min_count = var.aks_node_count_min
-    max_count = var.aks_node_count_max
+    auto_scaling_enabled = true
+    min_count            = var.aks_node_count_min
+    max_count            = var.aks_node_count_max
   }
 
   # ------------------------------------------------------------
