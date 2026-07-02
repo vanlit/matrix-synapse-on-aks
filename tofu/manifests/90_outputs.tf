@@ -129,28 +129,22 @@ output "traefik_public_ip_name" {
 ###############################################################
 
 output "managed_identity_client_ids" {
-
   value = {
     for k, v in azurerm_user_assigned_identity.managed :
     k => v.client_id
   }
-
 }
 
 output "managed_identity_principal_ids" {
-
   value = {
     for k, v in azurerm_user_assigned_identity.managed :
     k => v.principal_id
   }
-
 }
 
 output "managed_identity_ids" {
-
   value = {
     for k, v in azurerm_user_assigned_identity.managed :
     k => v.id
   }
-
 }
