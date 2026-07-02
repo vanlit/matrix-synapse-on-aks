@@ -88,3 +88,17 @@ variable "storage_containers" {
     backup  = "backup"
   }
 }
+
+##################
+# DOCKERHUB creds
+##################
+variable "dockerhub_username" {
+  type      = string
+  sensitive = true
+  default = ""
+}
+variable "dockerhub_token" {
+  type      = string
+  sensitive = true
+  default = ""
+}
