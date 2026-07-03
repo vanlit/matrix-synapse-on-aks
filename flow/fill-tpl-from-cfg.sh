@@ -9,6 +9,10 @@ find "$ROOT_DIR" -type f -name "*.yaml.tpl" |
 while read -r tpl
 do
     out="${tpl%.tpl}"
+    out=${out//apps-tpl/apps}
+
+    outdir=`dirname ${out}`
+    mkdir -p "$outdir"
 
     envsubst < "$tpl" > "$out"
 

@@ -1,8 +1,8 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: auth
-  namespace: argocd-matrix
+  name: matrix
+  namespace: ${TF_VAR_argocd_namespace}
 
 spec:
   project: default
@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
-    path: apps/20-auth
+    path: apps/40-matrix
     directory:
       recurse: false
       jsonnet: {}
@@ -18,7 +18,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd-matrix
+    namespace: ${TF_VAR_argocd_namespace}
 
   syncPolicy:
     automated:

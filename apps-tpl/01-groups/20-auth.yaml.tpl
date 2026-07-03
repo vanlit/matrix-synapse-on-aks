@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: auth
-  namespace: argocd-matrix
+  namespace: ${TF_VAR_argocd_namespace}
 
 spec:
   project: default
@@ -18,7 +18,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: argocd-matrix
+    namespace: ${TF_VAR_argocd_namespace}
 
   syncPolicy:
     automated:
