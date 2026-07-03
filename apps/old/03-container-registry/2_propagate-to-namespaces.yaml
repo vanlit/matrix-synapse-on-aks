@@ -19,5 +19,5 @@ spec:
         namespace: "{{ request.object.metadata.name }}"
         synchronize: true
         clone:
-          namespace: matrix-argocd
+          namespace: 
           name: registry-pullsecret

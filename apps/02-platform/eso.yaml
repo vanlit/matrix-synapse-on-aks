@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: external-secrets
-  namespace: matrix-argocd
+  namespace: 
 spec:
   project: default
 

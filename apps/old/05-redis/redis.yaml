@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: redis
-  namespace: matrix-argocd
+  namespace: 
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 
@@ -42,7 +42,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: redis
+    namespace: 
 
   syncPolicy:
     automated:

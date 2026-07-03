@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: traefik
-  namespace: matrix-argocd
+  namespace: 
 
 spec:
   project: default
@@ -41,7 +41,7 @@ spec:
               - name: dashboard-auth
 
         additionalArguments:
-          - "--certificatesresolvers.le.acme.email=contact@wanil.pl"
+          - "--certificatesresolvers.le.acme.email=contact@"
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
 
