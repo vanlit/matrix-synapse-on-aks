@@ -14,7 +14,7 @@ ArgoCD has been installed.
 Fetch the initial admin password with:
 
 KUBECONFIG=${local_file.kubeconfig.filename} \
-kubectl -n ${local.argocd_namespace} \
+kubectl -n ${var.argocd_namespace} \
 get secret argocd-initial-admin-secret \
 -o jsonpath='{.data.password}' | base64 -d
 
@@ -22,7 +22,7 @@ Port-forward:
 
 KUBECONFIG=${local_file.kubeconfig.filename} \
 kubectl port-forward svc/argocd-server \
--n ${local.argocd_namespace} \
+-n ${var.argocd_namespace} \
 8080:443
 
 Open:
