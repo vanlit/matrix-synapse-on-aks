@@ -7,7 +7,7 @@ variable "project" {
 variable "environment" {
   description = "Deployment environment (dev, staging, prod)"
   type        = string
-  default     = "prod2"
+  default     = "prod"
 }
 
 variable "location" {

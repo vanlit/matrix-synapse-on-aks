@@ -1,5 +1,6 @@
 #!/bin/sh
 
+export TF_VAR_environment=prod3
 export TF_VAR_location=westeurope
 export TF_VAR_TOP_DOMAIN=wanil.pl
 
