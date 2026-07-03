@@ -22,7 +22,7 @@ variable "tags" {
   default = {
     terraformed_by = "opentofu"
     managed_by     = "argocd"
-    project        = var.project
+    project        = "matrix"
   }
 }
 
