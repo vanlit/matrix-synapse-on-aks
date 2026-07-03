@@ -22,8 +22,8 @@ spec:
   data:
     - secretKey: username
       remoteRef:
-        key: ${KV_MATRIX_POSTGRES_USERNAME}
+        key: ${TF_VAR_kv_matrix_postgres_username}
 
     - secretKey: password
       remoteRef:
-        key: ${KV_MATRIX_POSTGRES_PASSWORD}
+        key: ${TF_VAR_kv_matrix_postgres_password}

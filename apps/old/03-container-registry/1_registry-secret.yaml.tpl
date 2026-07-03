@@ -34,12 +34,12 @@ spec:
   data:
     - secretKey: server
       remoteRef:
-        key: ${KV_DOCKERSRC_SERVER}
+        key: ${TF_VAR_kv_dockersrc_server_sname}
 
     - secretKey: username
       remoteRef:
-        key: ${KV_DOCKERSRC_USERNAME}
+        key: ${TF_VAR_kv_dockersrc_username_sname}
 
     - secretKey: password
       remoteRef:
-        key: ${KV_DOCKERSRC_PASSWORD}
+        key: ${TF_VAR_kv_dockersrc_passwd_sname}

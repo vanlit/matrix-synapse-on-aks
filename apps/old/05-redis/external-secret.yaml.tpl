@@ -18,4 +18,4 @@ spec:
   data:
     - secretKey: redis-password
       remoteRef:
-        key: ${KV_REDIS_PASSWORD}
+        key: ${TF_VAR_kv_redis_password_sname}

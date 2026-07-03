@@ -23,7 +23,7 @@ locals {
   # Key Vault
   # ------------------------------------------------------------
   keyvault_name = replace(
-    "${local.name_prefix}-kv",
+    "${local.name_prefix}-${var.keyvault_name_postfix}-kv",
     "-",
     ""
   )

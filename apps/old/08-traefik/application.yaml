@@ -41,7 +41,7 @@ spec:
               - name: dashboard-auth
 
         additionalArguments:
-          - "--certificatesresolvers.le.acme.email=contact@"
+          - "--certificatesresolvers.le.acme.email=contact@wanil.pl"
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
 

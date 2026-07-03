@@ -22,7 +22,7 @@ variable "tags" {
   default = {
     terraformed_by = "opentofu"
     managed_by     = "argocd"
-    project        = "matrix"
+    project        = var.project
   }
 }
 
@@ -45,6 +45,11 @@ variable "keyvault_sku" {
   default = "standard"
 }
 
+variable "keyvault_name_postfix" {
+  type    = string
+  default = "1"
+}
+
 variable "storage_account_tier" {
   type    = string
   default = "Standard"
@@ -55,7 +60,10 @@ variable "storage_replication_type" {
   default = "LRS"
 }
 
-
+variable "argocd_namespace" {
+  type    = string
+  default = "argocd_matrix"
+}
 
 variable "eso_namespace" {
   type    = string
@@ -92,6 +100,12 @@ variable "storage_containers" {
 ##################
 # DOCKERHUB creds
 ##################
+
+variable "dockerhub_server" {
+  type      = string
+  sensitive = true
+  default   = ""
+}
 variable "dockerhub_username" {
   type      = string
   sensitive = true
@@ -101,6 +115,22 @@ variable "dockerhub_token" {
   type      = string
   sensitive = true
   default = ""
+}
+
+variable "kv_dockersrc_server_sname" {
+  type      = string
+  sensitive = true
+  default   = "docker-registry-server"
+}
+variable "kv_dockersrc_username_sname" {
+  type      = string
+  sensitive = true
+  default   = "docker-registry-username"
+}
+variable "kv_dockersrc_passwd_sname" {
+  type      = string
+  sensitive = true
+  default = "docker-registry-password"
 }
 
 
@@ -117,4 +147,58 @@ variable "gitops_revision" {
   description = "Git revision to sync"
   type        = string
   default     = "main"
+}
+
+############
+# KV Secrets Names
+############
+variable "kv_redis_password_sname" {
+    type      = string
+    sensitive = false
+    default = "redis-password"
+}
+variable "kv_matrix_postgres_username" {
+    type      = string
+    sensitive = false
+    default = "matrix-postgres-username"
+}
+variable "kv_matrix_postgres_password" {
+    type      = string
+    sensitive = false
+    default = "postgres-password"
+}
+variable "kv_synapse_registration_secret" {
+    type      = string
+    sensitive = false
+    default = "synapse-registration-secret"
+}
+variable "kv_synapse_macaroon_secret" {
+    type      = string
+    sensitive = false
+    default = "synapse-macaroon-secret"
+}
+variable "kv_synapse_form_secret" {
+    type      = string
+    sensitive = false
+    default = "synapse-form-secret"
+}
+variable "kv_turn_static_auth_secret" {
+    type      = string
+    sensitive = false
+    default = "turn-static-auth-secret"
+}
+variable "kv_authelia_jwt_secret" {
+    type      = string
+    sensitive = false
+    default = "authelia-jwt-secret"
+}
+variable "kv_authelia_session_secret" {
+    type      = string
+    sensitive = false
+    default = "authelia-session-secret"
+}
+variable "kv_authelia_storage_encryption_key" {
+    type      = string
+    sensitive = false
+    default = "authelia-storage-encryption-key"
 }

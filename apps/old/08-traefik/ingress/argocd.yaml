@@ -10,7 +10,7 @@ spec:
 
   routes:
     - kind: Rule
-      match: Host(`argocd.`)
+      match: Host(`argocd.wanil.pl`)
       services:
         - name: argocd-server
           port: 80

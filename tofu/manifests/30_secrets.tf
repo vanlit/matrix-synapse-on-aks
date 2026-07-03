@@ -16,46 +16,55 @@ locals {
   generated_secrets = {
 
     redis-password = {
+      sname   = var.kv_redis_password_sname
       length  = 64
       special = true
     }
 
     matrix-postgres-password = {
+      sname   = var.kv_matrix_postgres_password
       length  = 64
       special = true
     }
 
     synapse-registration-secret = {
+      sname   = var.kv_synapse_registration_secret
       length  = 64
       special = true
     }
 
     synapse-macaroon-secret = {
+      sname   = var.kv_synapse_macaroon_secret
       length  = 64
       special = true
     }
 
     synapse-form-secret = {
+      sname   = var.kv_synapse_form_secret
       length  = 64
       special = true
     }
 
     turn-static-auth-secret = {
+      sname = var.kv_turn_static_auth_secret
       length  = 64
       special = true
     }
 
     authelia-jwt-secret = {
+      sname   = var.kv_authelia_jwt_secret
       length  = 64
       special = true
     }
 
     authelia-session-secret = {
+      sname   = var.kv_authelia_session_secret
       length  = 64
       special = true
     }
 
     authelia-storage-encryption-key = {
+      sname   = var.kv_authelia_storage_encryption_key
       length  = 64
       special = true
     }
@@ -68,8 +77,8 @@ locals {
 resource "random_password" "generated" {
   for_each = local.generated_secrets
 
-  length  = each.value.length
-  special = each.value.special
+  length           = each.value.length
+  special          = each.value.special
 
   override_special = "!@#$%^&*()-=_+[]{};:"
 }
@@ -93,8 +102,8 @@ resource "azurerm_key_vault_secret" "generated" {
 # Static platform secrets
 ############################################################
 resource "azurerm_key_vault_secret" "matrix_postgres_username" {
-  name  = "matrix-postgres-username"
-  value = "matrix"
+  name         = var.kv_matrix_postgres_username
+  value        = "matrix"
 
   key_vault_id = azurerm_key_vault.main.id
 
@@ -111,7 +120,7 @@ resource "azurerm_key_vault_secret" "docker-registry-server" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
-  name         = "docker-registry-server"
+  name         = var.kv_dockersrc_server_sname
   value        = "https://index.docker.io/v2/"
   key_vault_id = azurerm_key_vault.main.id
 
@@ -124,8 +133,8 @@ resource "azurerm_key_vault_secret" "docker-registry-username" {
 
   count = var.dockerhub_username != "" ? 1 : 0
 
-  name  = "docker-registry-username"
-  value = var.dockerhub_username
+  name         = var.kv_dockersrc_username_sname
+  value        = var.dockerhub_username
 
   key_vault_id = azurerm_key_vault.main.id
 
@@ -138,8 +147,8 @@ resource "azurerm_key_vault_secret" "docker-registry-password" {
 
   count = var.dockerhub_token != "" ? 1 : 0
 
-  name  = "docker-registry-password"
-  value = var.dockerhub_token
+  name         = var.kv_dockersrc_passwd_sname
+  value        = var.dockerhub_token
 
   key_vault_id = azurerm_key_vault.main.id
 

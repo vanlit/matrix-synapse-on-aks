@@ -1,5 +1,7 @@
 tofu fmt -recursive
 
+. ../../cfg.sh
+
 tofu validate
 
 # note: never create plan with .tf OR .tofu extension - that will break the execution

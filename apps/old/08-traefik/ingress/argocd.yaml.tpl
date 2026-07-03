@@ -10,7 +10,7 @@ spec:
 
   routes:
     - kind: Rule
-      match: Host(`argocd.${TOP_DOMAIN}`)
+      match: Host(`argocd.${TF_VAR_TOP_DOMAIN}`)
       services:
         - name: argocd-server
           port: 80

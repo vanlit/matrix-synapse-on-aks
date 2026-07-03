@@ -1,49 +1,33 @@
 #!/bin/sh
 
-export REGION=westeurope
-export TOP_DOMAIN=wanil.pl
+export TF_VAR_location=westeurope
+export TF_VAR_TOP_DOMAIN=wanil.pl
 
-export CLUSTER_NODE_COUNT=1
-export AKS_RG_NAME=matrix-rg
-export AKS_NAME=matrix-aks
-export CLUSTER_NODE_VMSIZE=Standard_D4s_v5
+export TF_VAR_aks_node_vm_size=Standard_D4s_v5
+export TF_VAR_kv_name_postfix="1"
 
-export KV_NAME=$REGION-matrix-kv
-
+export TF_VAR_eso_identity_name="eso-identity"
+export TF_VAR_eso_federated_credential_name="eso-federated-credential"
 export ESO_KRESNAME="azure-keyvault"
 export ESO_NAMESPACE="external-secrets"
-export ESO_IDENTITY_NAME="eso-identity"
-export ESO_FED_CRED_NAME="eso-federation"
 
+export TF_VAR_argocd_namespace="argocd-matrix"
 
-export STORAGE_ACCOUNT_NAME="${REGION}matrixsa"
-
-export BLOB_MEDIA_CONTAINER="synapse-media"
-export BLOB_WAL_CONTAINER="postgres-wal"
-export BLOB_BACKUP_CONTAINER="postgres-backups"
-
-export TRAEFIK_PUBLIC_IP_NAME="matrix-traefik-ip"
-
-export ARGO_NS="matrix-argocd"
-
-export TRAEFIK_NAMESPACE="traefik"
-
+export TF_VAR_TRAEFIK_NAMESPACE="traefik"
 export REDIS_NAMESPACE="redis"
 export POSTGRES_NAMESPACE="cloudnative-pg"
 
-export REDIS_RELEASE_NAME="redis"
-export POSTGRES_RELEASE_NAME="cnpg"
+export TF_VAR_kv_dockersrc_server_sname="docker-registry-server"
+export TF_VAR_kv_dockersrc_username_sname="docker-registry-username"
+export TF_VAR_kv_dockersrc_passwd_sname="docker-registry-password"
 
-export KV_DOCKERSRC_SERVER="docker-registry-server"
-export KV_DOCKERSRC_USERNAME="docker-registry-username"
-export KV_DOCKERSRC_PASSWORD="docker-registry-password"
-export KV_REDIS_PASSWORD="redis-password"
-export KV_MATRIX_POSTGRES_USERNAME="matrix-postgres-username"
-export KV_MATRIX_POSTGRES_PASSWORD="postgres-password"
-export KV_SYNAPSE_REGISTRATION_SECRET="synapse-registration-secret"
-export KV_SYNAPSE_MACAROON_SECRET="synapse-macaroon-secret"
-export KV_SYNAPSE_FORM_SECRET="synapse-form-secret"
-export KV_TURN_STATIC_AUTH_SECRET="turn-static-auth-secret"
-export KV_AUTHELIA_JWT_SECRET="authelia-jwt-secret"
-export KV_AUTHELIA_SESSION_SECRET="authelia-session-secret"
-export KV_AUTHELIA_STORAGE_ENCRYPTION_KEY="authelia-storage-encryption-key"
+export TF_VAR_kv_redis_password_sname="redis-password"
+export TF_VAR_kv_matrix_postgres_username="matrix-postgres-username"
+export TF_VAR_kv_matrix_postgres_password="postgres-password"
+export TF_VAR_kv_synapse_registration_secret="synapse-registration-secret"
+export TF_VAR_kv_synapse_macaroon_secret="synapse-macaroon-secret"
+export TF_VAR_kv_synapse_form_secret="synapse-form-secret"
+export TF_VAR_kv_turn_static_auth_secret="turn-static-auth-secret"
+export TF_VAR_kv_authelia_jwt_secret="authelia-jwt-secret"
+export TF_VAR_kv_authelia_session_secret="authelia-session-secret"
+export TF_VAR_kv_authelia_storage_encryption_key="authelia-storage-encryption-key"

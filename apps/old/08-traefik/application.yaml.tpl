@@ -41,7 +41,7 @@ spec:
               - name: dashboard-auth
 
         additionalArguments:
-          - "--certificatesresolvers.le.acme.email=contact@${TOP_DOMAIN}"
+          - "--certificatesresolvers.le.acme.email=contact@${TF_VAR_TOP_DOMAIN}"
           - "--certificatesresolvers.le.acme.storage=/data/acme.json"
           - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
 
