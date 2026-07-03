@@ -4,6 +4,8 @@ export TF_VAR_environment=prod3
 export TF_VAR_location=westeurope
 export TF_VAR_TOP_DOMAIN=wanil.pl
 
+export TF_VAR_argocd_namespace="argocd-matrix"
+
 export TF_VAR_aks_node_vm_size=Standard_D4s_v5
 export TF_VAR_kv_name_postfix="1"
 
@@ -12,7 +14,6 @@ export TF_VAR_eso_federated_credential_name="eso-federated-credential"
 export ESO_KRESNAME="azure-keyvault"
 export ESO_NAMESPACE="external-secrets"
 
-export TF_VAR_argocd_namespace="argocd-matrix"
 
 export TF_VAR_TRAEFIK_NAMESPACE="traefik"
 export REDIS_NAMESPACE="redis"

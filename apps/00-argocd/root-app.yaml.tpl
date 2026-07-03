@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: root
-  namespace: ${ARGO_NS}
+  namespace: ${TF_VAR_argocd_namespace}
 
 spec:
   project: default
@@ -19,7 +19,7 @@ spec:
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: ${ARGO_NS}
+    namespace: ${TF_VAR_argocd_namespace}
 
   syncPolicy:
     automated:

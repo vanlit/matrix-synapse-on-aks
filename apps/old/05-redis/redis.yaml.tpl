@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: redis
-  namespace: ${ARGO_NS}
+  namespace: ${TF_VAR_argocd_namespace}
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 

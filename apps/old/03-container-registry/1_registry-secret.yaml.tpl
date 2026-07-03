@@ -2,7 +2,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: registry-pullsecret
-  namespace: ${ARGO_NS}
+  namespace: ${TF_VAR_argocd_namespace}
   annotations:
     argocd.argoproj.io/sync-wave: "10"
 

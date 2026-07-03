@@ -2,7 +2,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: traefik
-  namespace: ${ARGO_NS}
+  namespace: ${TF_VAR_argocd_namespace}
 
 spec:
   project: default

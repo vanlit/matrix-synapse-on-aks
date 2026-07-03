@@ -19,5 +19,5 @@ spec:
         namespace: "{{ request.object.metadata.name }}"
         synchronize: true
         clone:
-          namespace: ${ARGO_NS}
+          namespace: ${TF_VAR_argocd_namespace}
           name: registry-pullsecret
