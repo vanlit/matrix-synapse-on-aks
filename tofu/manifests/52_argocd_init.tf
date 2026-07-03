@@ -46,7 +46,7 @@ resource "null_resource" "root_app" {
     command = <<EOT
 KUBECONFIG=${local_file.kubeconfig.filename} \
 kubectl apply \
--f ${path.module}/../apps/00-argocd/root-app.yaml
+-f ${path.module}/../../apps/00-argocd/root-app.yaml
 EOT
   }
 }
