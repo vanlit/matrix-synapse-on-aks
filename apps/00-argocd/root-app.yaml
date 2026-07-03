@@ -15,7 +15,6 @@ spec:
     directory:
       recurse: false
       jsonnet: {}
-      exclude: "**/*.tpl"
 
   destination:
     server: https://kubernetes.default.svc
