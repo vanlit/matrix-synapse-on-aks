@@ -1,10 +1,11 @@
 @startuml
 title Matrix Platform on Kubernetes
 left to right direction
+
 skinparam componentStyle rectangle
 skinparam shadowing false
 
-cloud "Internet" as internet
+cloud github
 
 cloud "Azure" {
 
@@ -18,9 +19,17 @@ cloud "Azure Blob Storage" {
 cloud "Azure Key Vault" as akv
 
 
-}
 
 node "Azure Kubernetes Service" {
+    frame "Ingress Layer" {
+        [Traefik] as traefik
+        [coturn] as coturn
+    }
+
+    frame "Auth" {
+        [Authelia] as authelia
+    }
+    
     frame "Control Plane"{
         frame "Secrets Management" {
             [External Secrets Operator] as eso
@@ -44,15 +53,14 @@ node "Azure Kubernetes Service" {
 
         [Element Web] as element_web
 
-        package "Synapse Workers" as SW {
+        package "Synapse Workers. \n State in PG, \n case&queues in Redis" as SW {
+            
             [Synapse Main] as synapse_main
             [Client Reader] as client_reader
             [Federation Reader] as federation_reader
             [Background Worker] as background_worker
             [Media Worker] as media_worker
         }
-
-        [coturn] as coturn
 
         database "CloudNativePG" as pg
 
@@ -64,22 +72,18 @@ node "Azure Kubernetes Service" {
 
         [Backup Worker] as backup_worker
     }
-
-
-    frame "Ingress Layer" {
-        [Traefik] as traefik
-    }
-
-    frame "Auth" {
-        [Authelia] as authelia
-    }
 }
+
+}
+
+
+cloud "Internet \n all https comms come via traefic \n asks for relay via coturn" as internet
 
 ' =========================
 ' INTERNET / ENTRY
 ' =========================
-internet -[#FFFF00]---> traefik : HTTPS requests
-internet -[#FFFF00]-> coturn : peer exchange forwarding
+internet -[#FFFF00]---> traefik
+internet -[#FFFF00]---> coturn
 
 traefik --> element_web : forward web UI
 traefik --> synapse_main : forward Matrix API
@@ -92,7 +96,7 @@ synapse_main -[#0066CC]-> authelia : authenticate users
 ' =========================
 ' DATABASE (RED)
 ' =========================
-SW -[#CC0000]-> pg : read/write State
+SW -[#CC0000]-> pg
 
 pg -[#CC0000]-> backup_worker : fetched by,\n for backups
 backup_worker -[#CC0000]-> daily_backups : create backups
@@ -101,9 +105,7 @@ backup_worker -[#CC0000]-> wal_archive
 ' =========================
 ' REDIS (ORANGE)
 ' =========================
-synapse_main -[#FF8C00]-> redis_master : cache & queues
-client_reader -[#FF8C00]-> redis_master : cache lookups
-federation_reader -[#FF8C00]-> redis_master : cache lookups
+SW -[#FF8C00]-> redis_master
 
 redis_master -[#FF8C00]-> redis_replica : replicate data
 redis_sentinel .[#FF8C00].> redis_master : monitor master
@@ -153,15 +155,11 @@ synapse_main -[#AA6994]-> coturn : request TURN credentials
 eso -[#FF69B4]-> akv : request secrets
 eso -[#FF69B4]-> kso : write secrets
 
-kso -[#FF69B4]-> traefik : apply TLS secrets
-kso -[#FF69B4]-> authelia : apply auth secrets
-
-kso -[#FF69B4]-> SW : apply secrets
-
-kso -[#FF69B4]-> pg : apply database credentials
-
-kso -[#FF69B4]-> redis : apply Redis credentials
-
-kso -[#FF69B4]-> coturn : apply TURN credentials
+kso -[#11ddaa]-> traefik : apply TLS secrets
+kso -[#11ddaa]-> authelia : apply auth secrets
+kso -[#11ddaa]-> SW : apply secrets
+kso -[#11ddaa]-> pg : apply database credentials
+kso -[#11ddaa]-> redis : apply Redis credentials
+kso -[#11ddaa]-> coturn : apply TURN credentials
 
 @enduml
