@@ -49,7 +49,7 @@ node "Azure Kubernetes Service" {
         [coturn\nlegacy 1:1 calls\nUDP 3478, TLS 5349,\nrelay range] as coturn
 
         [LiveKit SFU\ngroup calls / MatrixRTC\nUDP media range, TCP 7881 fallback,\nWS signalling] as livekit
-        
+
         [lk-jwt-service\nmints LiveKit tokens\nafter Matrix identity check] as lk_jwt
     }
 
@@ -80,6 +80,7 @@ node "Azure Kubernetes Service" {
 
 }
 
+argocd ..> github : fetch repo,\n periodically
 
 cloud "Internet \n all https comms come via traefik \n media via coturn (legacy) or LiveKit (MatrixRTC)" as internet
 
