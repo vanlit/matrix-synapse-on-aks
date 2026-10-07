@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: external-secrets
   namespace: argocd-matrix
+
+  annotations:
+    argocd.argoproj.io/sync-wave: "-30"
+
 spec:
   project: default
 
@@ -19,5 +23,6 @@ spec:
     automated:
       prune: true
       selfHeal: true
+
     syncOptions:
       - CreateNamespace=true

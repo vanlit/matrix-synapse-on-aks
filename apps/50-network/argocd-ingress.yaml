@@ -1,0 +1,23 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argocd
+  namespace: argocd-matrix
+
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+
+spec:
+  entryPoints:
+    - websecure
+
+  routes:
+    - kind: Rule
+      match: Host(`argocd.wanil.pl`)
+
+      services:
+        - name: argocd-server
+          port: 80
+
+  tls:
+    certResolver: le

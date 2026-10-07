@@ -4,6 +4,9 @@ metadata:
   name: network
   namespace: ${TF_VAR_argocd_namespace}
 
+  annotations:
+    argocd.argoproj.io/sync-wave: "30"
+
 spec:
   project: default
 
@@ -11,8 +14,9 @@ spec:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
     path: apps/50-network
+
     directory:
-      recurse: false
+      recurse: true
       jsonnet: {}
 
   destination:

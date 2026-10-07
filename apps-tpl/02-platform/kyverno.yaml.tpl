@@ -3,6 +3,10 @@ kind: Application
 metadata:
   name: kyverno
   namespace: ${TF_VAR_argocd_namespace}
+
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
+
 spec:
   project: default
 
@@ -17,9 +21,9 @@ spec:
 
     helm:
       releaseName: kyverno
+
       values: |
         installCRDs: true
-
 
   syncPolicy:
     automated:

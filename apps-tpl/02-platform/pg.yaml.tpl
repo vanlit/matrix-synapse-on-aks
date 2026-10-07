@@ -4,6 +4,9 @@ metadata:
   name: cloudnative-pg
   namespace: ${TF_VAR_argocd_namespace}
 
+  annotations:
+    argocd.argoproj.io/sync-wave: "-20"
+
 spec:
   project: default
 

@@ -4,6 +4,9 @@ metadata:
   name: observability
   namespace: argocd-matrix
 
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+
 spec:
   project: default
 
@@ -11,6 +14,7 @@ spec:
     repoURL: https://github.com/vanlit/matrix-synapse-on-aks.git
     targetRevision: main
     path: apps/10-observability
+
     directory:
       recurse: false
       jsonnet: {}

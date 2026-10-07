@@ -1,23 +1,29 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: external-secrets
+  name: monitoring
   namespace: ${TF_VAR_argocd_namespace}
-
-  annotations:
-    argocd.argoproj.io/sync-wave: "-30"
 
 spec:
   project: default
 
   source:
-    repoURL: https://charts.external-secrets.io
-    chart: external-secrets
-    targetRevision: 0.9.0
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 79.1.1
+
+    helm:
+      values: |
+        grafana:
+          enabled: true
+
+        prometheus:
+          prometheusSpec:
+            retention: 15d
 
   destination:
     server: https://kubernetes.default.svc
-    namespace: external-secrets-system
+    namespace: monitoring
 
   syncPolicy:
     automated:
