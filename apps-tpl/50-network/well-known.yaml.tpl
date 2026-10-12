@@ -1,0 +1,105 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: matrix-well-known
+  namespace: matrix
+
+data:
+  client: |
+    {
+      "m.homeserver": {
+        "base_url": "${TF_OUT_matrix_base_url}"
+      },
+      "org.matrix.msc4143.rtc_foci": [
+        {
+          "type": "livekit",
+          "livekit_service_url": "${TF_OUT_livekit_base_url}/livekit/jwt"
+        }
+      ]
+    }
+
+  server: |
+    {
+      "m.server": "matrix.${TF_VAR_TOP_DOMAIN}:443"
+    }
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: matrix-well-known
+  namespace: matrix
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: matrix-well-known
+
+  template:
+    metadata:
+      labels:
+        app: matrix-well-known
+
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.29-alpine
+
+          ports:
+            - name: http
+              containerPort: 80
+
+          volumeMounts:
+            - name: config
+              mountPath: /usr/share/nginx/html/.well-known/matrix/client
+              subPath: client
+              readOnly: true
+
+            - name: config
+              mountPath: /usr/share/nginx/html/.well-known/matrix/server
+              subPath: server
+              readOnly: true
+
+      volumes:
+        - name: config
+          configMap:
+            name: matrix-well-known
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: matrix-well-known
+  namespace: matrix
+
+spec:
+  selector:
+    app: matrix-well-known
+
+  ports:
+    - port: 80
+      targetPort: http
+
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: matrix-well-known
+  namespace: matrix
+
+spec:
+  entryPoints:
+    - websecure
+
+  routes:
+    - kind: Rule
+      match: Host(`${TF_VAR_TOP_DOMAIN}`) && PathPrefix(`/.well-known/matrix`)
+
+      services:
+        - name: matrix-well-known
+          port: 80
+
+  tls:
+    certResolver: le

@@ -1,0 +1,52 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: alloy
+  namespace: argocd-matrix
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://grafana.github.io/helm-charts
+    chart: alloy
+    targetRevision: 0.12.5
+
+    helm:
+      values: |
+        controller:
+          type: daemonset
+
+        alloy:
+          configMap:
+            content: |
+              logging {
+                level  = "info"
+              }
+
+              discovery.kubernetes "pods" {
+                role = "pod"
+              }
+
+              loki.source.kubernetes "pods" {
+                targets    = discovery.kubernetes.pods.targets
+                forward_to = [loki.write.local.receiver]
+              }
+
+              loki.write "local" {
+                endpoint {
+                  url = "http://loki.monitoring.svc.cluster.local/loki/api/v1/push"
+                }
+              }
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

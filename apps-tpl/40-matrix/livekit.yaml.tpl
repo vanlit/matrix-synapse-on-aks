@@ -1,0 +1,111 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: livekit-api
+  namespace: matrix
+
+spec:
+  refreshInterval: 1h
+
+  secretStoreRef:
+    kind: ClusterSecretStore
+    name: ${ESO_KRESNAME}
+
+  target:
+    name: livekit-api
+    creationPolicy: Owner
+
+    template:
+      type: Opaque
+
+  data:
+    - secretKey: ${TF_OUT_livekit_api_key}
+      remoteRef:
+        key: livekit-api-secret
+
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: livekit
+  namespace: ${TF_VAR_argocd_namespace}
+
+  annotations:
+    argocd.argoproj.io/sync-wave: "10"
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://helm.livekit.io
+    chart: livekit-server
+    targetRevision: 1.9.0
+
+    helm:
+      values: |
+        image:
+          repository: livekit/livekit-server
+          tag: 1.9.12
+
+        replicaCount: 1
+
+        podHostNetwork: true
+
+        terminationGracePeriodSeconds: 18000
+
+        livekit:
+          port: 7880
+          log_level: info
+
+          prometheus_port: 6789
+
+          rtc:
+            tcp_port: 7881
+            port_range_start: 50000
+            port_range_end: 60000
+            use_external_ip: true
+
+          redis:
+            address: redis-master.redis.svc.cluster.local:6379
+            password: ${REDIS_PASSWORD}
+
+          room:
+            auto_create: false
+
+          key_file: /run/livekit-keys/keys.yaml
+
+        storeKeysInSecret:
+          enabled: true
+          existingSecret: livekit-api
+
+        loadBalancer:
+          type: disable
+
+        turnLoadbalancer:
+          enable: false
+
+        serviceMonitor:
+          create: true
+
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 1Gi
+          limits:
+            cpu: 6000m
+            memory: 2Gi
+
+        nodeSelector:
+          workload: calls
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: calls
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true

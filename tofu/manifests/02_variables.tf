@@ -10,6 +10,11 @@ variable "environment" {
   default     = "prod"
 }
 
+variable "deployment_id" {
+  type    = string
+  default = "1"
+}
+
 variable "location" {
   description = "Azure region"
   type        = string
@@ -43,11 +48,6 @@ variable "aks_node_vm_size" {
 variable "keyvault_sku" {
   type    = string
   default = "standard"
-}
-
-variable "keyvault_name_postfix" {
-  type    = string
-  default = "1"
 }
 
 variable "storage_account_tier" {
