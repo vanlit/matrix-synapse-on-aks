@@ -33,9 +33,9 @@ node "Azure Kubernetes Service" {
         }
 
         frame "Observability" {
-            [Prometheus \n gathers METRICS from other services\n<back:pink> L&M </back>] as prometheus
+            [Prometheus \n gathers METRICS from services marked with <back:pink>M</back>\n<back:pink> L&M </back>] as prometheus
             [Grafana\n<back:cyan> KSO: admin password, OIDC client secret </back>\n<back:pink> L&M </back>] as grafana
-            [Loki \n gathers LOGS from other services\n<back:pink> L&M </back>] as loki
+            [Loki \n gathers LOGS from services  marked with <back:pink>L</back>\n<back:pink> L&M </back>] as loki
             [Node Exporter\n<back:pink> M </back>] as node_exporter
             [kube-state-metrics\n<back:pink> M </back>] as kube_state_metrics
         }
