@@ -19,45 +19,45 @@ cloud "Azure Key Vault" as akv
 
 node "Azure Kubernetes Service" {
     frame "Edge (HTTPS)" {
-        [Traefik\n<back:cyan> KSO: TLS secrets </back>] as traefik
+        [Traefik\n<back:cyan> KSO: TLS secrets </back>\n<back:pink> L&M </back>] as traefik
     }
 
     frame "Auth" {
-        [Authelia\n<back:cyan> KSO: session-key, storage-encryption and JWT secrets, OIDC client entries (hashed)</back>] as authelia
+        [Authelia\n<back:cyan> KSO: session-key, storage-encryption and JWT secrets, OIDC client entries (hashed)</back>\n<back:pink> L&M </back>] as authelia
     }
 
     frame "Control Plane"{
         frame "Secrets Management" {
-            [External Secrets Operator\n<back:lightgreen> WI: Key Vault access </back>] as eso
+            [External Secrets Operator\n<back:lightgreen> WI: Key Vault access </back>\n<back:pink> L&M </back>] as eso
             [Kubernetes Secret Objects (KSO)] as kso #cyan
         }
 
         frame "Observability" {
-            [Prometheus \n gathers METRICS from other services] as prometheus
-            [Grafana\n<back:cyan> KSO: admin password,\nOIDC client secret </back>] as grafana
-            [Loki \n gathers LOGS from other services] as loki
-            [Node Exporter] as node_exporter
-            [kube-state-metrics] as kube_state_metrics
+            [Prometheus \n gathers METRICS from other services\n<back:pink> L&M </back>] as prometheus
+            [Grafana\n<back:cyan> KSO: admin password, OIDC client secret </back>\n<back:pink> L&M </back>] as grafana
+            [Loki \n gathers LOGS from other services\n<back:pink> L&M </back>] as loki
+            [Node Exporter\n<back:pink> M </back>] as node_exporter
+            [kube-state-metrics\n<back:pink> M </back>] as kube_state_metrics
         }
 
         frame "GitOps" {
-            [ArgoCD \n sets up EVERYTHING in this AKS\n<back:orange> BOOTSTRAP: Git deploy key / GitHub App,\nOCI chart registry creds (if private) </back>] as argocd
+            [ArgoCD \n sets up EVERYTHING in this AKS\n<back:orange> BOOTSTRAP: Git deploy key / GitHub App,\nOCI chart registry creds (if private) </back>\n<back:pink> L&M </back>] as argocd
         }
     }
 
     frame "Calls Namespace\n(dedicated node pool, hostNetwork,\nNSG opens UDP/TCP media ports)" as calls_ns {
-        [coturn\nlegacy 1:1 calls\nUDP 3478, TLS 5349,\nrelay range\n<back:cyan> KSO: TURN shared secret + TLS cert </back>] as coturn
+        [coturn\nlegacy 1:1 calls\nUDP 3478, TLS 5349,\nrelay range\n<back:cyan> KSO: TURN shared secret + TLS cert </back>\n<back:pink> L&M </back>] as coturn
 
-        [LiveKit SFU\ngroup calls / MatrixRTC\nUDP media range, TCP 7881 fallback,\nWS signalling\n<back:cyan> KSO: LiveKit API key/secret </back>] as livekit
+        [LiveKit SFU\ngroup calls / MatrixRTC\nUDP media range, TCP 7881 fallback,\nWS signalling\n<back:cyan> KSO: LiveKit API key/secret </back>\n<back:pink> L&M </back>] as livekit
 
-        [lk-jwt-service\nmints LiveKit tokens\nafter Matrix identity check\n<back:cyan> KSO: LiveKit API key/secret </back>] as lk_jwt
+        [lk-jwt-service\nmints LiveKit tokens\nafter Matrix identity check\n<back:cyan> KSO: LiveKit API key/secret </back>\n<back:pink> L&M </back>] as lk_jwt
     }
 
     frame "Matrix Namespace" {
 
-        [Element Web\n(+ Element Call)\npublic SPA config, no secrets] as element_web
+        [Element Web\n(+ Element Call)\npublic SPA config, no secrets\n<back:pink> L&M </back>] as element_web
 
-        package "Synapse Workers. \n State in PG, \n case&queues in Redis\n<back:cyan> KSO: OIDC client secret (Authelia), signing key,\nmacaroon/form secrets, worker replication secret,\nDB + Redis credentials, TURN shared secret </back>" as SW {
+        package "Synapse Workers. \n State in PG, \n case&queues in Redis\n<back:cyan> KSO: OIDC client secret (Authelia), signing key,\nmacaroon/form secrets, worker replication secret,\nDB + Redis credentials, TURN shared secret </back>\n<back:pink> L&M </back>" as SW {
 
             [Synapse Main\nTURN creds via shared secret,\nMatrixRTC enabled] as synapse_main
             [Client Reader] as client_reader
@@ -66,15 +66,15 @@ node "Azure Kubernetes Service" {
             [Media Worker\n<back:lightgreen> WI: Blob write (media) </back>] as media_worker
         }
 
-        database "CloudNativePG\n<back:cyan> KSO: database credentials </back>\n<back:lightgreen> WI: Blob write (WAL archive) </back>" as pg
+        database "CloudNativePG\n<back:cyan> KSO: database credentials </back>\n<back:lightgreen> WI: Blob write (WAL archive) </back>\n<back:pink> L&M </back>" as pg
 
-        package "Redis\n<back:cyan> KSO: Redis credentials </back>" as redis {
+        package "Redis\n<back:cyan> KSO: Redis credentials </back>\n<back:pink> L&M </back>" as redis {
             [Redis Master] as redis_master
             [Redis Replica] as redis_replica
             [Redis Sentinel] as redis_sentinel
         }
 
-        [Backup Worker\n<back:cyan> KSO: read-only DB role credentials </back>\n<back:lightgreen> WI: Blob write (backups) </back>] as backup_worker
+        [Backup Worker\n<back:cyan> KSO: read-only DB role credentials </back>\n<back:lightgreen> WI: Blob write (backups) </back>\n<back:pink> L&M </back>] as backup_worker
     }
 }
 
@@ -133,15 +133,9 @@ media_worker -[#228B22]-> media_storage : store media files
 
 ' =========================
 ' OBSERVABILITY
+' Prometheus/Loki collection is shown as "L&M" stamps
+' inside the modules instead of scrape/ship edges.
 ' =========================
-prometheus -[#black,dotted]-> synapse_main
-prometheus -[#black,dotted]-> pg
-prometheus -[#black,dotted]-> redis_master
-prometheus -[#black,dotted]-> traefik : scrape metrics
-prometheus -[#black,dotted]-> coturn
-prometheus -[#black,dotted]-> livekit
-prometheus -[#black,dotted]-> kube_state_metrics
-prometheus -[#black,dotted]-> node_exporter
 
 grafana --> prometheus : query metrics
 grafana --> loki : query logs
@@ -167,6 +161,7 @@ legend right
   <back:cyan> KSO </back> secret delivered via Kubernetes Secret Objects (from Key Vault via ESO)
   <back:lightgreen> WI </back> Azure Workload Identity, no stored secret
   <back:orange> BOOTSTRAP </back> installed out-of-band, cannot come from ESO (ArgoCD deploys ESO)
+  <back:pink> L&M </back> Logs gathered by Loki, Metrics scraped by Prometheus (M = metrics only)
   Container images are pulled by the kubelet (imagePullSecrets or
   ACR pull-through cache via AKS managed identity), not by ArgoCD.
 endlegend
